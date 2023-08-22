@@ -1,0 +1,6 @@
+export enum PartyEventState {
+  PENDING_CONFIRMATION = "PENDING_CONFIRMATION",
+  OPEN = "OPEN",
+  CLOSED = "CLOSED",
+  TERMINATED = "TERMINATED",
+}

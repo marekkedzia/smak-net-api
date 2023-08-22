@@ -59,7 +59,7 @@
     "express-jwt": "^8.4.1",
     "jwks-rsa": "^3.0.1",
     "koa": "^2.14.2",
-    "koa-bodyparser": "^4.4.1",
+    "@koa/bodyparser": "^5.0.0",
     "moment": "^2.29.4",
     "mongodb": "^5.0.1",
     "swagger-ui-express": "^4.6.0",

@@ -1,7 +1,7 @@
 import { HEALTH_PATH } from "../src/modules/health/health.router";
 import { app } from "../src/app";
 import supertest from "supertest";
-import { HEALTH_MESSAGE } from "../src/modules/health/health.controller";
+import { HEALTH_MESSAGE } from "../src/modules/health/health.service";
 import { HTTP_STATUS } from "../src/utils/constants/http.statuses";
 
 describe(`GET ${HEALTH_PATH}`, () => {
