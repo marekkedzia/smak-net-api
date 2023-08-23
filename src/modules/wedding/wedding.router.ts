@@ -1,13 +1,25 @@
-import Router from "@koa/router";
 import { WeddingRequestBody } from "./schemas/wedding.request.body";
-import { PartyEventService } from "../party.event/party.event.service";
-import { PartyEventRepository } from "../party.event/party.event.repository";
+import { InternalRouter } from "../../utils/schemas/router";
+import { Body, OperationId, Post, Route, Security } from "tsoa";
 import { createWedding } from "./wedding.service";
+import { WeddingRouterPort } from "./schemas/wedding.router.port";
 
-export const WEDDING_PATH = "/wedding";
+@Route("/wedding")
+export class WeddingRouter extends InternalRouter {
+  constructor(private weddingRouterAdapter: WeddingRouterPort) {
+    super("/wedding");
 
-const createWeddingHandler =
-  (weddingRequestBody: WeddingRequestBody) => createWedding(new PartyEventService(new PartyEventRepository()).createPartyEvent)(weddingRequestBody);
+    this.router
+      .post("/", (ctx) => (ctx.body = this.createWeddingHandler(ctx.request.body as WeddingRequestBody)));
+  }
 
-export const weddingRouter = new Router({ prefix: WEDDING_PATH })
-  .post("/", (ctx) => (ctx.body = createWeddingHandler(ctx.request.body as WeddingRequestBody)));
+  /**
+   * Create wedding for user.
+   */
+  @OperationId("createWedding")
+  @Security("jwt", ["user:write"])
+  @Post("/")
+  createWeddingHandler(@Body() weddingRequestBody: WeddingRequestBody): Promise<string> {
+    return createWedding(this.weddingRouterAdapter.createWeddingEvent)(weddingRequestBody);
+  }
+}

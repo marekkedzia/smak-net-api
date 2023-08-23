@@ -1,31 +1,10 @@
-import { Collection, Document, OptionalUnlessRequiredId, WithId } from "mongodb";
+import { Document, Filter, OptionalUnlessRequiredId, UpdateFilter } from "mongodb";
+import { Wedding } from "../../modules/wedding/schemas/wedding";
 
-export abstract class Repository<T extends Document> {
-  private collection: Collection<T>;
-
-  protected constructor(collection: Collection<T>) {
-    this.collection = collection;
-  }
-
-  insertOne = async (entity: OptionalUnlessRequiredId<T>): Promise<void> => {
-    await this.collection.insertOne(entity);
-  };
-
-  findOne = async (query): Promise<T | null> => {
-    const result: WithId<T> | null = await this.collection.findOne(query);
-    return result as T | null;
-  };
-  findMany = async (query): Promise<T[]> => {
-    const result: WithId<T>[] = await this.collection.find(query).toArray();
-    return result as T[];
-  };
-
-  findOneAndUpdate = async (query, update): Promise<T | null> => {
-    const result = await this.collection.findOneAndUpdate(query, update);
-    return result.value as T | null;
-  };
-
-  updateOne = async (query, update): Promise<void> => {
-    await this.collection.updateOne(query, update);
-  };
+export interface Repository<T extends Document> {
+  insertOne: (entity: OptionalUnlessRequiredId<T>) => Promise<void>;
+  findOne: (query: Filter<T>) => Promise<T | null>;
+  findMany: (query: Filter<T>) => Promise<T[]>;
+  findOneAndUpdate: (query: Filter<T>, update: UpdateFilter<Wedding>) => Promise<T | null>;
+  updateOne: (query: Filter<T>, update: UpdateFilter<Wedding>) => Promise<void>;
 }

@@ -1,20 +1,20 @@
-import { Db, MongoClient } from "mongodb";
-import { PartyEvent } from "../modules/party.event/schemas/party.event";
+import { Collection, Db, MongoClient } from "mongodb";
+import { Wedding } from "../modules/wedding/schemas/wedding";
 
 export class Mongo {
   //@ts-ignore
-  private mongo: Db;
+  private static mongo: Db;
   //@ts-ignore
-  private client: MongoClient;
+  private static client: MongoClient;
 
-  connect = (url: string): Promise<Db> =>
+  public static connect = (url: string): Promise<Db> =>
     MongoClient.connect(url, { ignoreUndefined: true })
       .then((c) => (this.client = c))
       .then((c) => (this.mongo = c.db()))
       .then((db) => db);
 
-  close = () => this.client.close();
-  partyEvents = () => this.mongoCollection<PartyEvent>("party-events");
+  public static close = () => this.client.close();
+  public static weddings = (): Collection<Wedding> => this.mongoCollection<Wedding>("weddings");
   //@ts-ignore
-  private mongoCollection = <T>(name: string) => this.mongo.collection<T>(name);
+  private static mongoCollection = <T>(name: string) => this.mongo.collection<T>(name);
 }

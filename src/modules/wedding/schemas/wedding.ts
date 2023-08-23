@@ -1,5 +1,5 @@
-import { PartyEventId, PartyEventName } from "../../party.event/schemas/party.event";
+import { PartyEvent, PartyEventId, PartyEventName } from "../../party.event/schemas/party.event";
 
-export type Wedding = PartyEventName;
+export type Wedding = PartyEvent;
 export type WeddingId = PartyEventId;
 export type WeddingName = PartyEventName;

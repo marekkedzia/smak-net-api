@@ -1,10 +1,24 @@
-import Router from "@koa/router";
 import { checkHealth } from "./health.service";
+import { InternalRouter } from "../../utils/schemas/router";
+import { Get, OperationId, Route, Security } from "tsoa";
 
-export const HEALTH_PATH = "/health";
+@Route("/health")
+export class HealthRouter extends InternalRouter {
+  constructor() {
+    super("/health");
 
-export const healthRouter =
-  new Router({ prefix: HEALTH_PATH })
-    .get("/", (ctx) => (ctx.body = checkHealth()));
+    this.router.get("/", (ctx) => (ctx.body = this.getHealthHandler()));
+  }
+
+  /**
+   * Get health status
+   */
+  @OperationId("getHealth")
+  @Security("none")
+  @Get("/")
+  getHealthHandler() {
+    return checkHealth();
+  }
+}
 
 
