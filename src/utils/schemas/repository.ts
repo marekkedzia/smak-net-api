@@ -6,5 +6,5 @@ export interface Repository<T extends Document> {
   findOne: (query: Filter<T>) => Promise<T | null>;
   findMany: (query: Filter<T>) => Promise<T[]>;
   findOneAndUpdate: (query: Filter<T>, update: UpdateFilter<Wedding>) => Promise<T | null>;
-  updateOne: (query: Filter<T>, update: UpdateFilter<Wedding>) => Promise<void>;
+  updateOne: (query: Filter<T>, update: UpdateFilter<Wedding>) => Promise<{ modifiedCount: number }>;
 }

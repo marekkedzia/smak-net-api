@@ -1,3 +1,3 @@
 export enum Role {
-  PATIENT = "PATIENT",
+  USER = "USER",
 }

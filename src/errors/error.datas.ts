@@ -5,11 +5,9 @@ export enum ErrorDatas {
 }
 
 export enum ForbiddenReasons {
-  NO_REQUIRED_AUTHORIZATIONS = " User doesn't have required authorizations",
-  HAS_ALREADY_SCHEDULED_MEETING = " User has already scheduled meeting for given treatment package",
-  NO_REQUIRED_PERMISSIONS = " User doesn't have required permissions",
-  SURVEY_NUMBER_EXCEEDED = " User has already completed survey",
-  TREATMENT_DOESNT_EXIST = " Treatment doesn't exist",
+  NO_REQUIRED_PERMISSIONS = " User doesn't have required permissions.",
+  PARTY_EVENT_IS_NOT_OPEN = " Party event is not open.",
+  PARTY_EVENT_ALREADY_CLOSED = " Party event is already closed.",
 }
 
 export enum Resource {

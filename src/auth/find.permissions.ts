@@ -1,12 +1,12 @@
-import { PatientPermission } from "./patient.permission";
+import { Permissions } from "./permissions";
 import { Role } from "./role";
 
 const roleToPermissions = {
-  [Role.PATIENT]: Object.values(PatientPermission)
+  [Role.USER]: Object.values(Permissions)
 };
 
-export const findPermissions = (roles: Role[]): PatientPermission[] => {
-  let permissions: PatientPermission[] = [];
+export const findPermissions = (roles: Role[]): Permissions[] => {
+  let permissions: Permissions[] = [];
 
   for (const role of roles) {
     permissions = permissions.concat(roleToPermissions[role]);

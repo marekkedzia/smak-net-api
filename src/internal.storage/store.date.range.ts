@@ -8,10 +8,10 @@ export const storeDateRange = (req: Request, res: Response, next: NextFunction) 
 
 
   if (!req.query.startDate || !req.query.endDate)
-    internalLocalStorage.storeDateRange({ startDate: provideDefaultStartDate(), endDate: provideDefaultEndDate() });
+    internalLocalStorage.setDateRange({ startDate: provideDefaultStartDate(), endDate: provideDefaultEndDate() });
   else {
     const formattedDateRange: ISODateRange = DateService.formatDateRange(parseInt(req.query.startDate as string), parseInt(req.query.endDate as string));
-    internalLocalStorage.storeDateRange(formattedDateRange);
+    internalLocalStorage.setDateRange(formattedDateRange);
   }
 
   next();

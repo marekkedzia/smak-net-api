@@ -3,21 +3,40 @@ import { ISODateRange } from "../services/date.service";
 import { UserId } from "../utils/schemas/user.id";
 import { logger } from "../utils/logger";
 import { InternalServerError } from "../errors/error.module";
+import { Context, Next } from "koa";
+import { RequestId } from "../utils/schemas/request.id";
+import { IdService } from "../services/id.service";
 
 export class InternalLocalStorage {
-  localStorage = new AsyncLocalStorage<Map<string, any>>();
+  localStorage: AsyncLocalStorage<Map<string, string>> = new AsyncLocalStorage<Map<string, any>>();
 
-  startStorage = (req, res, next): void => {
-    this.localStorage.run(new Map(), next);
+  startStorage = async (ctx: Context, next: Next): Promise<void> => {
+    await this.localStorage.run(new Map(), async () => await next());
   };
 
-  storeUserId = (userId: UserId): void => {
+  storeRequestId = async (ctx: Context, next: Next): Promise<void> => {
+    this.getStore().set("requestId", IdService.provideRequestId());
+    await next();
+  };
+
+  storeUserId = async (ctx: Context, next: Next): Promise<void> => {
+    //this.setUserIdInStorage(ctx.user.id); //TODO
+    this.setUserId("DUMMY_USER_ID" as UserId); //TODO
+    await next();
+  };
+
+  setRequestId = (requestId: RequestId): void => {
+    this.getStore().set("requestId", requestId);
+  };
+  setUserId = (userId: UserId): void => {
     this.getStore().set("userId", userId);
   };
 
-  storeDateRange = (dateRange: ISODateRange): void => {
+  setDateRange = (dateRange: ISODateRange): void => {
     this.getStore().set("dateRange", dateRange);
   };
+
+  getRequestId = (): RequestId => this.getStore().get("requestId");
 
   getUserId = (): UserId => this.getStore().get("userId");
 
