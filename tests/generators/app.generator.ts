@@ -27,3 +27,27 @@ export const obtainTestGetResponse = async (router: InternalRouter, path: string
 
   return { status, body };
 };
+
+export const obtainTestPostResponse = async (router: InternalRouter, path: string, requestBody: any): Promise<Response> => { //TODO move to another file
+  const app = generateTestApp(router).listen();
+
+  const { status, body } = await supertest(app)
+    .post(path)
+    .send(requestBody);
+
+  app.close();
+
+  return { status, body };
+};
+
+export const obtainTestPutResponse = async (router: InternalRouter, path: string, requestBody: any): Promise<Response> => { //TODO move to another file
+  const app = generateTestApp(router).listen();
+
+  const { status, body } = await supertest(app)
+    .put(path)
+    .send(requestBody);
+
+  app.close();
+
+  return { status, body };
+};

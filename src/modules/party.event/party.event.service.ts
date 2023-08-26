@@ -1,5 +1,5 @@
 import { IdService } from "../../services/id.service";
-import { DateService } from "../../services/date.service";
+import { DateService, ServerDateType } from "../../services/date.service";
 import { PartyEvent, PartyEventAccessKey, PartyEventId, PartyEventName } from "./schemas/party.event";
 import { PartyEventState } from "./schemas/party.event.states";
 import { UserId } from "../../utils/schemas/user.id";
@@ -13,7 +13,7 @@ export class PartyEventService {
   constructor(private partyEventRepository: Repository<PartyEvent>) {
   }
 
-  createPartyEvent = async (name: PartyEventName, state: PartyEventState): Promise<PartyEventId> => {
+  createPartyEvent = async (name: PartyEventName, date: ServerDateType, state: PartyEventState): Promise<PartyEventId> => {
     const userId: UserId = internalLocalStorage.getUserId();
 
     const initEvent = (): PartyEvent => ({
@@ -21,7 +21,8 @@ export class PartyEventService {
       createdAt: DateService.getDateNow(),
       ownerId: userId,
       credentials: {
-        name
+        name,
+        date
       },
       state
     });
@@ -33,19 +34,19 @@ export class PartyEventService {
   };
 
   getPartyEvent = async (partyEventId: PartyEventId): Promise<PartyEvent> => {
-        const userId: UserId = internalLocalStorage.getUserId();
-        const event: PartyEvent | null = await this.partyEventRepository.findOne({ id: partyEventId, ownerId: userId });
+    const userId: UserId = internalLocalStorage.getUserId();
+    const event: PartyEvent | null = await this.partyEventRepository.findOne({ id: partyEventId, ownerId: userId });
 
-        if (!event)
-          throw new ResourceNotFoundError(Resource.EVENT);
+    if (!event)
+      throw new ResourceNotFoundError(Resource.EVENT);
 
-        return event;
-      };
+    return event;
+  };
 
   getPartyEventsForUser = async (): Promise<PartyEvent[]> => {
-        const userId: UserId = internalLocalStorage.getUserId();
-        return this.partyEventRepository.findMany({ ownerId: userId });
-      };
+    const userId: UserId = internalLocalStorage.getUserId();
+    return this.partyEventRepository.findMany({ ownerId: userId });
+  };
 
   updatePartyEventAccessKey = async (partyEventId: PartyEventId, accessKey: PartyEventAccessKey): Promise<WeddingAccessKey> => {
     const userId: UserId = internalLocalStorage.getUserId();

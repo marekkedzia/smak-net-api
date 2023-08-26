@@ -1,6 +1,7 @@
 import { Opaque } from "ts-opaque";
 import { DatabaseObject } from "../../../utils/schemas/database.object";
 import { PartyEventState } from "./party.event.states";
+import { DateService, ServerDateType } from "../../../services/date.service";
 
 export type PartyEventId = Opaque<"id", PartyEvent>
 export type PartyEventName = Opaque<"name", PartyEvent>
@@ -12,5 +13,6 @@ export interface PartyEvent extends DatabaseObject<PartyEventId, PartyEventCrede
 
 export interface PartyEventCredentials {
   name: PartyEventName;
+  date: ServerDateType;
   accessKey?: PartyEventAccessKey;
 }

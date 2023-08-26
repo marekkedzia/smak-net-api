@@ -5,6 +5,9 @@ import { OwnerWeddingService } from "./owner.wedding.service";
 import { Wedding, WeddingAccessKey, WeddingId, WeddingListElement } from "../schemas/wedding";
 import { Context } from "koa";
 import { PartyEvent } from "../../party.event/schemas/party.event";
+import { HTTP_STATUS } from "../../../utils/constants/http.statuses";
+import { validate } from "../../../utils/validator";
+import { createWeddingValidator } from "../validators/create.wedding.validator";
 
 @Route("/wedding")
 export class OwnerWeddingRouter extends InternalRouter {
@@ -12,10 +15,14 @@ export class OwnerWeddingRouter extends InternalRouter {
     super("/owner/wedding");
 
     this.router
-      .post("/", async (ctx: Context): Promise<string> =>
-        (ctx.body = await this.createWeddingHandler(ctx.request.body as WeddingRequestBody)))
-      .post("/:weddingId/access-key", async (ctx: Context): Promise<WeddingAccessKey> =>
-        (ctx.body = await this.updateWeddingAccessKeyHandler(ctx.params.weddingId)))
+      .post("/", validate(createWeddingValidator), async (ctx: Context) => {
+        ctx.status = HTTP_STATUS.CREATED;
+        ctx.body = await this.createWeddingHandler(ctx.request.body as WeddingRequestBody);
+      })
+      .post("/:weddingId/access-key", async (ctx: Context) => {
+        ctx.status = HTTP_STATUS.CREATED;
+        ctx.body = await this.updateWeddingAccessKeyHandler(ctx.params.weddingId);
+      })
 
       .get("/", async (ctx: Context): Promise<WeddingListElement[]> =>
         (ctx.body = await this.getWeddingListHandler()))

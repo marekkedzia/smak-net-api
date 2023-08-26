@@ -1,4 +1,4 @@
-export enum Permissions {
+export enum Permission {
   CREATE_WEDDING = "CREATE_WEDDING",
   GET_WEDDING = "GET_WEDDING",
   UPDATE_WEDDING = "UPDATE_WEDDING",

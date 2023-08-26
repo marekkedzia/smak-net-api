@@ -25,7 +25,11 @@ export class OwnerWeddingService {
 
   createWedding = async (weddingRequestBody: WeddingRequestBody): Promise<WeddingId> => {
 
-    const weddingId: WeddingId = await this.partyEventService.createPartyEvent(weddingRequestBody.name, PartyEventState.PENDING_CONFIRMATION);
+    const weddingId: WeddingId = await this.partyEventService.createPartyEvent(
+      weddingRequestBody.name,
+      weddingRequestBody.date,
+      PartyEventState.PENDING_CONFIRMATION
+    );
 
     logger.debug(`Wedding ${weddingId} created for user ${internalLocalStorage.getUserId()} by request ${internalLocalStorage.getRequestId()} `);
     return weddingId;

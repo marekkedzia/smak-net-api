@@ -3,11 +3,13 @@ import { Wedding, WeddingListElement } from "../../../../src/modules/wedding/sch
 import { repositoryMock } from "../../../mocks/repository.mock";
 import { testGetItemList } from "../../../tests.schemas/test.get.items.list";
 import { Resource } from "../../../../src/errors/error.datas";
-import { Permissions } from "../../../../src/auth/permissions";
-import { GetItemTestCase } from "../../../tests.schemas/get.item.test.case";
+import { Permission } from "../../../../src/auth/permission";
+import { GetItemTestCase } from "../../../tests.schemas/test.cases/get.item.test.case";
 import { mapWeddingToListElement } from "../../../../src/modules/wedding/wedding.mappers";
 import { OwnerWeddingRouter } from "../../../../src/modules/wedding/owner.wedding/owner.wedding.router";
 import { OwnerWeddingService } from "../../../../src/modules/wedding/owner.wedding/owner.wedding.service";
+import { testPermissionAccess } from "../../../tests.schemas/test.permission.access";
+import { WeddingRepository } from "../../../../src/modules/wedding/wedding.repository";
 
 describe("test owner get wedding list handler", () => {
     const testGetWeddingListEndpoint = (weddings: Wedding[]) => {
@@ -18,7 +20,7 @@ describe("test owner get wedding list handler", () => {
 
       const testCase: GetItemTestCase<Wedding[], WeddingListElement[]> = {
         resourceName: Resource.EVENT,
-        requiredPermission: Permissions.GET_WEDDING,
+        requiredPermission: Permission.GET_WEDDING,
         source: weddings,
         expected: weddings.map(mapWeddingToListElement)
       };

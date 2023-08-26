@@ -36,15 +36,8 @@ export class ValidationErrors implements AppError {
   code = ErrorCodes.VALIDATOR_ERROR;
   data;
 
-  constructor(
-    private userInputValue?: string,
-    private validationErrors?: string[],
-    invalidProperties?: (string | undefined)[] | string) {
-    this.data = {
-      info: `User input is not assignable to required type.`,
-      userInputValue,
-      invalidProperties
-    };
+  constructor(message: string, expected: string, received: string) {
+    this.data = { message, expected, received };
   }
 }
 

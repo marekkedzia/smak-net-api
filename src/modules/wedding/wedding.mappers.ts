@@ -11,5 +11,5 @@ export const mapWedding = ({ id, createdAt, credentials, state, ownerId }): Wedd
 export const mapWeddingToListElement = ({ id, createdAt, state }): WeddingListElement => ({
   id,
   createdAt,
-  state
+  state,
 });
