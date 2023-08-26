@@ -12,18 +12,18 @@ export class OwnerWeddingRouter extends InternalRouter {
     super("/owner/wedding");
 
     this.router
-      .get("/", async (ctx: Context): Promise<WeddingListElement[]> =>
-        (ctx.body = await this.readUsersWeddingListHandler()))
-      .get("/:weddingId", async (ctx: Context): Promise<PartyEvent> =>
-        (ctx.body = await this.readWeddingHandler(ctx.params.weddingId)))
-
       .post("/", async (ctx: Context): Promise<string> =>
         (ctx.body = await this.createWeddingHandler(ctx.request.body as WeddingRequestBody)))
       .post("/:weddingId/access-key", async (ctx: Context): Promise<WeddingAccessKey> =>
-        (ctx.body = await this.generateWeddingAccessKeyHandler(ctx.params.weddingId)))
+        (ctx.body = await this.updateWeddingAccessKeyHandler(ctx.params.weddingId)))
+
+      .get("/", async (ctx: Context): Promise<WeddingListElement[]> =>
+        (ctx.body = await this.getWeddingListHandler()))
+      .get("/:weddingId", async (ctx: Context): Promise<PartyEvent> =>
+        (ctx.body = await this.getWeddingHandler(ctx.params.weddingId)))
 
       .put("/:weddingId/closed-state", async (ctx: Context): Promise<void> =>
-        (ctx.body = await this.closeWeddingHandler(ctx.params.weddingId)));
+        (ctx.body = await this.closeWeddingStateHandler(ctx.params.weddingId)));
   }
 
   /**
@@ -42,8 +42,8 @@ export class OwnerWeddingRouter extends InternalRouter {
   @OperationId("getWedding")
   @Security("jwt", ["user:read"])
   @Get("/:weddingId")
-  readWeddingHandler(weddingId: string): Promise<Wedding> {
-    return this.weddingService.readWeddingDetails(weddingId as WeddingId);
+  getWeddingHandler(weddingId: string): Promise<Wedding> {
+    return this.weddingService.getWedding(weddingId as WeddingId);
   }
 
   /**
@@ -52,8 +52,8 @@ export class OwnerWeddingRouter extends InternalRouter {
   @OperationId("getWeddingList")
   @Security("jwt", ["user:read"])
   @Get("/")
-  readUsersWeddingListHandler(): Promise<WeddingListElement[]> {
-    return this.weddingService.readUsersWeddingsList();
+  getWeddingListHandler(): Promise<WeddingListElement[]> {
+    return this.weddingService.getWeddingsList();
   }
 
   /**
@@ -62,7 +62,7 @@ export class OwnerWeddingRouter extends InternalRouter {
   @OperationId("closeWedding")
   @Security("jwt", ["user:update"])
   @Put("/:weddingId/closed-state")
-  closeWeddingHandler(weddingId: string): Promise<void> {
+  closeWeddingStateHandler(weddingId: string): Promise<void> {
     return this.weddingService.closeWedding(weddingId as WeddingId);
   }
 
@@ -72,7 +72,7 @@ export class OwnerWeddingRouter extends InternalRouter {
   @OperationId("generateWeddingAccessKey")
   @Security("jwt", ["user:create"])
   @Post("/:weddingId/access-key")
-  generateWeddingAccessKeyHandler(weddingId: string): Promise<WeddingAccessKey> {
-    return this.weddingService.generateWeddingAccessKey(weddingId as WeddingId);
+  updateWeddingAccessKeyHandler(weddingId: string): Promise<WeddingAccessKey> {
+    return this.weddingService.updateWeddingAccessKey(weddingId as WeddingId);
   }
 }

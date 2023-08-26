@@ -2,7 +2,12 @@ import { Permissions } from "./permissions";
 import { Role } from "./role";
 
 const roleToPermissions = {
-  [Role.USER]: Object.values(Permissions)
+  [Role.USER]: [
+    Permissions.GET_WEDDING,
+    Permissions.CREATE_WEDDING,
+    Permissions.UPDATE_WEDDING
+  ]
+
 };
 
 export const findPermissions = (roles: Role[]): Permissions[] => {

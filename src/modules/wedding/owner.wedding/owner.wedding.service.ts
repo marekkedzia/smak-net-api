@@ -14,6 +14,7 @@ import { PartyEventState } from "../../party.event/schemas/party.event.states";
 import { IdService } from "../../../services/id.service";
 import { WeddingRepository } from "../wedding.repository";
 import { PartyEventService } from "../../party.event/party.event.service";
+import { mapWedding, mapWeddingToListElement } from "../wedding.mappers";
 
 export class OwnerWeddingService {
   private partyEventService: PartyEventService;
@@ -30,31 +31,18 @@ export class OwnerWeddingService {
     return weddingId;
   };
 
-  readWeddingDetails = async (weddingId: WeddingId): Promise<Wedding> => {
-    const mapWedding = ({ id, createdAt, credentials, state, ownerId }): Wedding => ({
-      id,
-      createdAt,
-      credentials,
-      state,
-      ownerId
-    });
-
+  getWedding = async (weddingId: WeddingId): Promise<Wedding> => {
     const wedding: Wedding = await this.partyEventService.getPartyEvent(weddingId);
 
     logger.debug(`Wedding ${weddingId} retrieved for user ${internalLocalStorage.getUserId()} by request ${internalLocalStorage.getRequestId()}`);
     return mapWedding(wedding);
   };
 
-  readUsersWeddingsList = async (): Promise<WeddingListElement[]> => {
-    const mapWeddingToList = ({ id, createdAt, state }): WeddingListElement => ({
-      id,
-      createdAt,
-      state
-    });
+  getWeddingsList = async (): Promise<WeddingListElement[]> => {
 
     const weddingList: Wedding[] = await this.partyEventService.getPartyEventsForUser();
     logger.debug(`Wedding list retrieved for user ${internalLocalStorage.getUserId()} by request ${internalLocalStorage.getRequestId()}`);
-    return weddingList.map(mapWeddingToList);
+    return weddingList.map(mapWeddingToListElement);
   };
 
   closeWedding = async (weddingId: WeddingId): Promise<void> => {
@@ -67,7 +55,7 @@ export class OwnerWeddingService {
     logger.debug(`Wedding ${weddingId} closed for user ${internalLocalStorage.getUserId()} by request ${internalLocalStorage.getRequestId()}`);
   };
 
-  generateWeddingAccessKey = async (weddingId: WeddingId): Promise<WeddingAccessKey> => {
+  updateWeddingAccessKey = async (weddingId: WeddingId): Promise<WeddingAccessKey> => {
     const wedding: Wedding = await this.partyEventService.getPartyEvent(weddingId);
 
     const UNALLOWED_STATES: WeddingState[] = [PartyEventState.PENDING_CONFIRMATION, PartyEventState.CLOSED];
