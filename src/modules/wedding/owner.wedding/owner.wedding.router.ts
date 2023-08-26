@@ -1,15 +1,15 @@
-import { WeddingRequestBody } from "./schemas/wedding.request.body";
-import { InternalRouter } from "../../utils/schemas/router";
+import { WeddingRequestBody } from "../schemas/wedding.request.body";
+import { InternalRouter } from "../../../utils/schemas/router";
 import { Body, Get, OperationId, Post, Put, Route, Security } from "tsoa";
-import { WeddingService } from "./wedding.service";
-import { Wedding, WeddingAccessKey, WeddingId, WeddingListElement } from "./schemas/wedding";
+import { OwnerWeddingService } from "./owner.wedding.service";
+import { Wedding, WeddingAccessKey, WeddingId, WeddingListElement } from "../schemas/wedding";
 import { Context } from "koa";
-import { PartyEvent } from "../party.event/schemas/party.event";
+import { PartyEvent } from "../../party.event/schemas/party.event";
 
 @Route("/wedding")
-export class WeddingRouter extends InternalRouter {
-  constructor(private weddingService: WeddingService) {
-    super("/wedding");
+export class OwnerWeddingRouter extends InternalRouter {
+  constructor(private weddingService: OwnerWeddingService) {
+    super("/owner/wedding");
 
     this.router
       .get("/", async (ctx: Context): Promise<WeddingListElement[]> =>

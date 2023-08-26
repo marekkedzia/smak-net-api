@@ -1,10 +1,10 @@
-import { checkHealth } from "./health.service";
+import { HealthService } from "./health.service";
 import { InternalRouter } from "../../utils/schemas/router";
 import { Get, OperationId, Route, Security } from "tsoa";
 
 @Route("/health")
 export class HealthRouter extends InternalRouter {
-  constructor() {
+  constructor(private healthService: HealthService) {
     super("/health");
 
     this.router.get("/", (ctx) => (ctx.body = this.getHealthHandler()));
@@ -17,7 +17,7 @@ export class HealthRouter extends InternalRouter {
   @Security("none")
   @Get("/")
   getHealthHandler() {
-    return checkHealth();
+    return this.healthService.checkHealth();
   }
 }
 
