@@ -5,4 +5,5 @@ export type PostItemTestCase = {
   resourceName: Resource,
   validBody: { [key: string]: any },
   requiredPermission: Permission,
+  path?: string
 }

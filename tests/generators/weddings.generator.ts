@@ -1,4 +1,4 @@
-import { Wedding, WeddingId, WeddingName } from "../../src/modules/wedding/schemas/wedding";
+import { Wedding, WeddingAccessKey, WeddingId, WeddingName } from "../../src/modules/wedding/schemas/wedding";
 import { PartyEventState } from "../../src/modules/party.event/schemas/party.event.states";
 import { UserId } from "../../src/utils/schemas/user.id";
 
@@ -7,7 +7,8 @@ export const wedding1: Wedding = {
   createdAt: 1111,
   credentials: {
     name: "Karolina&Marek" as WeddingName,
-    date: 111111
+    date: 111111,
+    accessKey: "accessKey1" as WeddingAccessKey
   },
   state: PartyEventState.OPEN,
   ownerId: "owner1" as UserId

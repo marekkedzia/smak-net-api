@@ -16,7 +16,7 @@ export type WeddingCredentials = PartyEventCredentials;
 export type WeddingListElement = { id: WeddingId, createdAt: Date, state: WeddingState };
 export type GuestWeddingCredentials = {
   id: WeddingId,
-  createdAt: Date,
+  createdAt: ServerDateType,
   state: WeddingState,
   credentials: WeddingCredentials,
 }

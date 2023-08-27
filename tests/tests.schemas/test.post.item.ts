@@ -10,7 +10,8 @@ export const testPostItem = <SourceType extends DatabaseObject<string, Object>>(
   unrequiredBodyProperties?: string[]
 ) => {
   describe(`POST ${router.path}`, () => {
-      const postItem = (body) => obtainTestPostResponse(router, router.path, body);
+      const path = testCase.path || router.path;
+      const postItem = (body) => obtainTestPostResponse(router, path, body);
       const isObject = (value): boolean => typeof value === "object";
       const isArray = (value): boolean => Array.isArray(value);
 
