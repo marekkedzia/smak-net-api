@@ -1,0 +1,5 @@
+export enum FileState {
+  UPLOADED = "UPLOADED",
+  DELETED = "DELETED",
+  PENDING_UPLOAD = "PENDING_UPLOAD",
+}

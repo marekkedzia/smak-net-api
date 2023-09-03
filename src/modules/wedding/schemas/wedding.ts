@@ -6,7 +6,7 @@ import {
   PartyEventName
 } from "../../party.event/schemas/party.event";
 import { PartyEventState } from "../../party.event/schemas/party.event.states";
-import { ServerDateType } from "../../../services/date.service";
+import { ServerDateType } from "../../../utils/date.utils";
 
 export type Wedding = PartyEvent;
 export type WeddingId = PartyEventId;

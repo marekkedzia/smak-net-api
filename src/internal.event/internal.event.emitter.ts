@@ -1,5 +1,5 @@
 import { EventEmitter } from "events";
-import { IdService } from "../services/id.service";
+import { IdUtils } from "../utils/id.utils";
 import { HandledEventTypes } from "./schemas/handled.event.types";
 import { InternalEvent } from "./schemas/internal.event";
 import { HandledEventPayloads } from "./schemas/handled.event.payloads";
@@ -11,7 +11,7 @@ export class InternalEventEmitter {
   }
 
   createEvent = (eventType: HandledEventTypes, payload: HandledEventPayloads): InternalEvent => ({
-      eventId: IdService.provideInternalEventId(),
+      eventId: IdUtils.provideInternalEventId(),
       eventType,
       createdAt: Date.now(),
       payload

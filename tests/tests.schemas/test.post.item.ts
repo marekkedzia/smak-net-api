@@ -1,10 +1,9 @@
-import { DatabaseObject } from "../../src/utils/schemas/database.object";
 import { InternalRouter } from "../../src/utils/schemas/router";
 import { HTTP_STATUS } from "../../src/utils/constants/http.statuses";
 import { obtainTestPostResponse } from "../generators/app.generator";
 import { PostItemTestCase } from "./test.cases/post.item.test.case";
 
-export const testPostItem = <SourceType extends DatabaseObject<string, Object>>(
+export const testPostItem = (
   testCase: PostItemTestCase,
   router: InternalRouter,
   unrequiredBodyProperties?: string[]

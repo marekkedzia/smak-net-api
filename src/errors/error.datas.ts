@@ -12,4 +12,5 @@ export enum ForbiddenReasons {
 
 export enum Resource {
   EVENT = "event",
+  FILE = "file",
 }

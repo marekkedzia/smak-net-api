@@ -1,11 +1,11 @@
 import { AsyncLocalStorage } from "async_hooks";
-import { ISODateRange } from "../services/date.service";
+import { ISODateRange } from "../utils/date.utils";
 import { UserId } from "../utils/schemas/user.id";
 import { logger } from "../utils/logger";
 import { InternalServerError } from "../errors/error.module";
 import { Context, Next } from "koa";
 import { RequestId } from "../utils/schemas/request.id";
-import { IdService } from "../services/id.service";
+import { IdUtils } from "../utils/id.utils";
 
 export class InternalLocalStorage {
   localStorage: AsyncLocalStorage<Map<string, string>> = new AsyncLocalStorage<Map<string, any>>();
@@ -15,7 +15,7 @@ export class InternalLocalStorage {
   };
 
   storeRequestId = async (ctx: Context, next: Next): Promise<void> => {
-    this.getStore().set("requestId", IdService.provideRequestId());
+    this.getStore().set("requestId", IdUtils.provideRequestId());
     await next();
   };
 

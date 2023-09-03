@@ -1,6 +1,6 @@
 import { PostItemTestCase } from "../../../../tests.schemas/test.cases/post.item.test.case";
 import { Resource } from "../../../../../src/errors/error.datas";
-import { Permission } from "../../../../../src/auth/permission";
+import { RoutePermission } from "../../../../../src/auth/permission";
 import { OwnerWeddingRouter } from "../../../../../src/modules/wedding/owner.wedding/owner.wedding.router";
 import { OwnerWeddingService } from "../../../../../src/modules/wedding/owner.wedding/owner.wedding.service";
 import { repositoryMock } from "../../../../mocks/repository.mock";
@@ -18,7 +18,7 @@ describe("test owner post wedding access key handler", () => {
 
     const testCase: PostItemTestCase = {
       resourceName: Resource.EVENT,
-      requiredPermission: Permission.CREATE_WEDDING_ACCESS_KEY,
+      requiredPermission: RoutePermission.CREATE_WEDDING_ACCESS_KEY,
       validBody: {},
       path: `${testWeddingRouter.path}/${wedding1.id}/access-key`
     };

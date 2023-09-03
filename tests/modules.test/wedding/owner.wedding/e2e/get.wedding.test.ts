@@ -2,7 +2,7 @@ import { testGetItem } from "../../../../tests.schemas/test.get.item";
 import { GetItemTestCase } from "../../../../tests.schemas/test.cases/get.item.test.case";
 import { Wedding } from "../../../../../src/modules/wedding/schemas/wedding";
 import { Resource } from "../../../../../src/errors/error.datas";
-import { Permission } from "../../../../../src/auth/permission";
+import { RoutePermission } from "../../../../../src/auth/permission";
 import { OwnerWeddingRouter } from "../../../../../src/modules/wedding/owner.wedding/owner.wedding.router";
 import { OwnerWeddingService } from "../../../../../src/modules/wedding/owner.wedding/owner.wedding.service";
 import { repositoryMock } from "../../../../mocks/repository.mock";
@@ -14,7 +14,7 @@ describe("test owner get wedding handler", () => {
 
     const getWeddingTestCase: GetItemTestCase<Wedding, Wedding> = {
       resourceName: Resource.EVENT,
-      requiredPermission: Permission.GET_WEDDING,
+      requiredPermission: RoutePermission.GET_WEDDING,
       source: wedding,
       expected: wedding
     };

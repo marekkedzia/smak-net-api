@@ -11,7 +11,7 @@ import { internalLocalStorage } from "../../../config/internal.local.storage.con
 import { Forbidden } from "../../../errors/error.module";
 import { ForbiddenReasons } from "../../../errors/error.datas";
 import { PartyEventState } from "../../party.event/schemas/party.event.states";
-import { IdService } from "../../../services/id.service";
+import { IdUtils } from "../../../utils/id.utils";
 import { WeddingRepository } from "../wedding.repository";
 import { PartyEventService } from "../../party.event/party.event.service";
 import { mapWedding, mapWeddingToListElement } from "../wedding.mappers";
@@ -66,7 +66,7 @@ export class OwnerWeddingService {
     if (UNALLOWED_STATES.includes(wedding.state))
       throw new Forbidden(ForbiddenReasons.PARTY_EVENT_IS_NOT_OPEN);
 
-    const weddingAccessKey: WeddingAccessKey = await this.partyEventService.updatePartyEventAccessKey(weddingId, IdService.providePartyEventAccessKey());
+    const weddingAccessKey: WeddingAccessKey = await this.partyEventService.updatePartyEventAccessKey(weddingId, IdUtils.providePartyEventAccessKey());
 
     logger.debug(`Wedding ${weddingId} access key generated for user ${internalLocalStorage.getUserId()} by request ${internalLocalStorage.getRequestId()}`);
     return weddingAccessKey;

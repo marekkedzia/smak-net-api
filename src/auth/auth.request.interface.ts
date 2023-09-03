@@ -1,4 +1,4 @@
-import { Permission } from "./permission";
+import { RoutePermission } from "./permission";
 import { Role } from "./role";
 
 
@@ -6,7 +6,7 @@ interface AuthUser {
   id: string;
   name: string;
   roles: Role[];
-  permissions: Permission[];
+  permissions: RoutePermission[];
 }
 
 export interface Pagination {

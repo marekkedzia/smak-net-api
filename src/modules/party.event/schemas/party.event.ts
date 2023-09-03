@@ -1,7 +1,7 @@
 import { Opaque } from "ts-opaque";
 import { DatabaseObject } from "../../../utils/schemas/database.object";
 import { PartyEventState } from "./party.event.states";
-import { DateService, ServerDateType } from "../../../services/date.service";
+import { ServerDateType } from "../../../utils/date.utils";
 
 export type PartyEventId = Opaque<"id", PartyEvent>
 export type PartyEventName = Opaque<"name", PartyEvent>

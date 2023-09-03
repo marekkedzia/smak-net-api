@@ -1,5 +1,5 @@
 import { WeddingName } from "./wedding";
-import { ServerDateType } from "../../../services/date.service";
+import { ServerDateType } from "../../../utils/date.utils";
 
 export interface WeddingRequestBody {
   name: WeddingName;

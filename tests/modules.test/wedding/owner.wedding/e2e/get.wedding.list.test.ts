@@ -3,7 +3,7 @@ import { Wedding, WeddingListElement } from "../../../../../src/modules/wedding/
 import { repositoryMock } from "../../../../mocks/repository.mock";
 import { testGetItemList } from "../../../../tests.schemas/test.get.items.list";
 import { Resource } from "../../../../../src/errors/error.datas";
-import { Permission } from "../../../../../src/auth/permission";
+import { RoutePermission } from "../../../../../src/auth/permission";
 import { GetItemTestCase } from "../../../../tests.schemas/test.cases/get.item.test.case";
 import { mapWeddingToListElement } from "../../../../../src/modules/wedding/wedding.mappers";
 import { OwnerWeddingRouter } from "../../../../../src/modules/wedding/owner.wedding/owner.wedding.router";
@@ -20,7 +20,7 @@ describe("test owner get wedding list handler", () => {
 
       const testCase: GetItemTestCase<Wedding[], WeddingListElement[]> = {
         resourceName: Resource.EVENT,
-        requiredPermission: Permission.GET_WEDDING,
+        requiredPermission: RoutePermission.GET_WEDDING,
         source: weddings,
         expected: weddings.map(mapWeddingToListElement)
       };

@@ -1,10 +1,9 @@
-import { Collection, Db, MongoClient } from "mongodb";
+import { Collection, Db, Document, MongoClient } from "mongodb";
 import { Wedding } from "../modules/wedding/schemas/wedding";
+import { FileInfo } from "../modules/party.event/party.event.file.service/schema/file.info";
 
 export class Mongo {
-  //@ts-ignore
   private static mongo: Db;
-  //@ts-ignore
   private static client: MongoClient;
 
   public static connect = (url: string): Promise<Db> =>
@@ -15,6 +14,6 @@ export class Mongo {
 
   public static close = () => this.client.close();
   public static weddings = (): Collection<Wedding> => this.mongoCollection<Wedding>("weddings");
-  //@ts-ignore
-  private static mongoCollection = <T>(name: string) => this.mongo.collection<T>(name);
+  public static photosInfo = (): Collection<FileInfo> => this.mongoCollection<FileInfo>("photosInfo");
+  private static mongoCollection = <T extends Document>(name: string) => this.mongo.collection<T>(name);
 }

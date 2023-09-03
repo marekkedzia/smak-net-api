@@ -2,7 +2,7 @@ import { testGetItem } from "../../../../tests.schemas/test.get.item";
 import { GuestWeddingCredentials, Wedding } from "../../../../../src/modules/wedding/schemas/wedding";
 import { GetItemTestCase } from "../../../../tests.schemas/test.cases/get.item.test.case";
 import { Resource } from "../../../../../src/errors/error.datas";
-import { Permission } from "../../../../../src/auth/permission";
+import { RoutePermission } from "../../../../../src/auth/permission";
 import { repositoryMock } from "../../../../mocks/repository.mock";
 import { GuestWeddingService } from "../../../../../src/modules/wedding/guest.wedding/guest.wedding.service";
 import { GuestWeddingRouter } from "../../../../../src/modules/wedding/guest.wedding/guest.wedding.router";
@@ -21,7 +21,7 @@ describe("test owner get wedding by access key handler", () => {
 
   const testCase: GetItemTestCase<Wedding, GuestWeddingCredentials> = {
     resourceName: Resource.EVENT,
-    requiredPermission: Permission.GET_WEDDING_GUEST_CREDENTIALS,
+    requiredPermission: RoutePermission.GET_WEDDING_GUEST_CREDENTIALS,
     path: `${testWeddingRouter.path}/${wedding1.credentials.accessKey}`,
     source: wedding1,
     expected: {

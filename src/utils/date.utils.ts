@@ -13,7 +13,7 @@ export interface TimestampDateRange {
 
 export type ServerDateType = number;
 
-export class DateService {
+export class DateUtils {
   public static ISO_DATE_FORMAT = "YYYY-MM-DD";
   public static MINUTE = 60 * 1000;
   public static HOUR = 60 * this.MINUTE;
@@ -47,15 +47,15 @@ export class DateService {
 
   public static getTimestampDate = (isoDate: string): number => new Date(isoDate).getTime();
   public static convertISODateRangeToTimestampDateRange = (isoDateRange: ISODateRange): TimestampDateRange => ({
-    startDate: DateService.getTimestampDate(isoDateRange.startDate),
-    endDate: DateService.getTimestampDate(isoDateRange.endDate)
+    startDate: DateUtils.getTimestampDate(isoDateRange.startDate),
+    endDate: DateUtils.getTimestampDate(isoDateRange.endDate)
   });
 
 
   public static getISODate = (date: number): string => moment(date).format(this.ISO_DATE_FORMAT);
   public static convertTimestampDateRangeToISODateRange = (timestampDateRange: TimestampDateRange): ISODateRange => ({
-      startDate: DateService.getISODate(timestampDateRange.startDate),
-      endDate: DateService.getISODate(timestampDateRange.endDate)
+      startDate: DateUtils.getISODate(timestampDateRange.startDate),
+      endDate: DateUtils.getISODate(timestampDateRange.endDate)
     }
   );
 }

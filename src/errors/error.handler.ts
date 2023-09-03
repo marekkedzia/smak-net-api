@@ -1,7 +1,7 @@
 import { AppError } from "./error.module";
 import { ErrorCodes } from "./error.codes";
 import { ErrorDatas } from "./error.datas";
-import { IdService } from "../services/id.service";
+import { IdUtils } from "../utils/id.utils";
 import { logger } from "../utils/logger";
 import { Context, Next } from "koa";
 
@@ -21,7 +21,7 @@ export const errorHandler = async (
       data: (error as AppError).data
     } : internalServerError;
 
-    const id = IdService.provideErrorId();
+    const id = IdUtils.provideErrorId();
 
     logger.error(`Error ${id}, `, error);
 

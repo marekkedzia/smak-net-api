@@ -1,5 +1,5 @@
-import { IdService } from "../../services/id.service";
-import { DateService, ServerDateType } from "../../services/date.service";
+import { IdUtils } from "../../utils/id.utils";
+import { DateUtils, ServerDateType } from "../../utils/date.utils";
 import { PartyEvent, PartyEventAccessKey, PartyEventId, PartyEventName } from "./schemas/party.event";
 import { PartyEventState } from "./schemas/party.event.states";
 import { UserId } from "../../utils/schemas/user.id";
@@ -17,8 +17,8 @@ export class PartyEventService {
     const userId: UserId = internalLocalStorage.getUserId();
 
     const initEvent = (): PartyEvent => ({
-      id: IdService.provideEventId(),
-      createdAt: DateService.getDateNow(),
+      id: IdUtils.provideEventId(),
+      createdAt: DateUtils.getDateNow(),
       ownerId: userId,
       credentials: {
         name,
