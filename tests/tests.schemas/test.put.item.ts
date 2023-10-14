@@ -20,8 +20,8 @@ export const testPutItem = (
         expect(body).toBeDefined();
       });
 
-      validateMissingProperties(testCase.validBody, testCase.resourceName, putItem, unrequiredBodyProperties);
-      validateWrongTypes(testCase.validBody, testCase.resourceName, putItem);
+      validateMissingProperties(testCase.validBody, testCase.resourceName.toString(), putItem, unrequiredBodyProperties);
+      validateWrongTypes(testCase.validBody, testCase.resourceName.toString(), putItem);
     }
   );
 };

@@ -5,12 +5,10 @@ export enum ErrorDatas {
 }
 
 export enum ForbiddenReasons {
-  NO_REQUIRED_PERMISSIONS = " User doesn't have required permissions.",
-  PARTY_EVENT_IS_NOT_OPEN = " Party event is not open.",
-  PARTY_EVENT_ALREADY_CLOSED = " Party event is already closed.",
+  NO_REQUIRED_PERMISSIONS = "User doesn't have required permissions.",
+
 }
 
 export enum Resource {
-  EVENT = "event",
-  FILE = "file",
+
 }

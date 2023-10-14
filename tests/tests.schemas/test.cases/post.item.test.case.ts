@@ -1,9 +1,9 @@
 import { Resource } from "../../../src/errors/error.datas";
-import { RoutePermission } from "../../../src/auth/permission";
+import { Permission } from "../../../src/auth/permission";
 
 export type PostItemTestCase = {
   resourceName: Resource,
   validBody: { [key: string]: any },
-  requiredPermission: RoutePermission,
+  requiredPermission: Permission,
   path?: string
 }

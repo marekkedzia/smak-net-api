@@ -1,17 +1,14 @@
-import { RoutePermission } from "./permission";
+import { Permission } from "./permission";
 import { Role } from "./role";
 
 const roleToPermissions = {
   [Role.USER]: [
-    RoutePermission.GET_WEDDING,
-    RoutePermission.CREATE_WEDDING,
-    RoutePermission.UPDATE_WEDDING
   ]
 
 };
 
-export const findPermissions = (roles: Role[]): RoutePermission[] => {
-  let permissions: RoutePermission[] = [];
+export const findPermissions = (roles: Role[]): Permission[] => {
+  let permissions: Permission[] = [];
 
   for (const role of roles) {
     permissions = permissions.concat(roleToPermissions[role]);

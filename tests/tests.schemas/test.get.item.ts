@@ -5,7 +5,7 @@ import { HTTP_STATUS } from "../../src/utils/constants/http.statuses";
 import { ResourceNotFoundError } from "../../src/errors/error.module";
 import { obtainTestGetResponse } from "../generators/app.generator";
 
-export const testGetItem = <SourceType extends DatabaseObject<string, Object>, ExpectedType>(
+export const testGetItem = <SourceType extends DatabaseObject<string>, ExpectedType>(
   testCase: GetItemTestCase<SourceType, ExpectedType>,
   router: InternalRouter
 ) => {
@@ -27,8 +27,8 @@ export const testGetItem = <SourceType extends DatabaseObject<string, Object>, E
         const expectedError: ResourceNotFoundError = new ResourceNotFoundError(testCase.resourceName);
 
         expect(status).toBe(HTTP_STATUS.NOT_FOUND);
-        expect(body.code).toBe(expectedError.code);
-        expect(body.data).toBe(expectedError.data);
+        expect((body as ResourceNotFoundError).code).toBe(expectedError.code);
+        expect(body as ResourceNotFoundError).toBe(expectedError.data);
       });
     }
   );

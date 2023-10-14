@@ -23,5 +23,5 @@ jobs:
           application_name: ${{vars.APPLICATION_NAME}}
           environment_name: ${{vars.ENVIRONMENT_NAME}}
           version_label: 1.0.0
-          region: us-west-2
+          region: eu-west-1
           deployment_package: deploy.zip

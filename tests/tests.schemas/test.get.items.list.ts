@@ -6,7 +6,7 @@ import { obtainTestGetResponse } from "../generators/app.generator";
 import { HTTP_STATUS } from "../../src/utils/constants/http.statuses";
 
 
-export const testGetItemList = <SourceType extends DatabaseObject<string, Object>[], ExpectedType>(
+export const testGetItemList = <SourceType extends DatabaseObject<string>[], ExpectedType>(
   testCase: GetItemTestCase<SourceType, ExpectedType>,
   router: InternalRouter
 ) => {

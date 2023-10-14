@@ -25,7 +25,6 @@ export const errorHandler = async (
 
     logger.error(`Error ${id}, `, error);
 
-
     ctx.status = status;
     ctx.body = {
       ...res, id

@@ -1,6 +1,4 @@
 import { Collection, Db, Document, MongoClient } from "mongodb";
-import { Wedding } from "../modules/wedding/schemas/wedding";
-import { FileInfo } from "../modules/party.event/party.event.file.service/schema/file.info";
 
 export class Mongo {
   private static mongo: Db;
@@ -13,7 +11,5 @@ export class Mongo {
       .then((db) => db);
 
   public static close = () => this.client.close();
-  public static weddings = (): Collection<Wedding> => this.mongoCollection<Wedding>("weddings");
-  public static photosInfo = (): Collection<FileInfo> => this.mongoCollection<FileInfo>("photosInfo");
   private static mongoCollection = <T extends Document>(name: string) => this.mongo.collection<T>(name);
 }
