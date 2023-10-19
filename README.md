@@ -1,7 +1,7 @@
 # Online Shop Project
 
 ## Description
-The online store "xxx" offers a wide range of high quality products from various shops in Wroclaw.
+The online store "SmakNet" offers a wide range of high quality products from various shops in Wroclaw.
 Users can browse products, add them to their cart, and make secure online payments. 
 The interface is user-friendly and adapted to various devices, allowing easy shopping from any location.
 
