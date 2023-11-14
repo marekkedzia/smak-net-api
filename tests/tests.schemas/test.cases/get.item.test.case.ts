@@ -1,6 +1,6 @@
 import { Document } from "mongodb";
-import { Resource } from "../../../src/errors/error.datas";
 import { Permission } from "../../../src/auth/permission";
+import { Resource } from "../../../src/utils/constants/resources.names";
 
 export type GetItemTestCase<SourceType extends Document, ExpectedType> = {
   source: SourceType,

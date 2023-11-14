@@ -8,7 +8,3 @@ export enum ForbiddenReasons {
   NO_REQUIRED_PERMISSIONS = "User doesn't have required permissions.",
 
 }
-
-export enum Resource {
-
-}

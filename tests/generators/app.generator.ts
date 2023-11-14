@@ -11,8 +11,6 @@ export const generateTestApp = (router: InternalRouter) =>
     .use(errorHandler)
     .use(bodyParser())
     .use(internalLocalStorage.startStorage)
-    .use(internalLocalStorage.storeRequestId)
-    .use(internalLocalStorage.storeUserId)
     .use(router.getRoutes());
 
 

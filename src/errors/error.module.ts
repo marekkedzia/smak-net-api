@@ -1,6 +1,7 @@
 import { ErrorCodes } from "./error.codes";
-import { ErrorDatas, ForbiddenReasons, Resource } from "./error.datas";
+import { ErrorDatas, ForbiddenReasons } from "./error.datas";
 import { HTTP_STATUS } from "../utils/constants/http.statuses";
+import { Resource } from "../utils/constants/resources.names";
 
 export interface AppError {
   status: number,

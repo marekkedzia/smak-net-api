@@ -1,4 +1,5 @@
-import { Collection, Db, Document, MongoClient } from "mongodb";
+import { Db, Document, MongoClient } from "mongodb";
+import { Product } from "../modules/product/product.interfaces";
 
 export class Mongo {
   private static mongo: Db;
@@ -11,5 +12,6 @@ export class Mongo {
       .then((db) => db);
 
   public static close = () => this.client.close();
+  public static products = () => this.mongoCollection<Product>("products");
   private static mongoCollection = <T extends Document>(name: string) => this.mongo.collection<T>(name);
 }

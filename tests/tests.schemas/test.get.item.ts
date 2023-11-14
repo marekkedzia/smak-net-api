@@ -13,7 +13,7 @@ export const testGetItem = <SourceType extends DatabaseObject<string>, ExpectedT
       const getResponse = (path: string) => obtainTestGetResponse(router, path);
       const validResourceId: string = testCase.source.id;
       const path: string = testCase.path || `${router.path}/${validResourceId}`;
-      const pathWithInvalidId: string = `${path}-invalid`;
+      const pathWithInvalidId = `${path}-invalid`;
 
       it(`should get ${testCase.resourceName}`, async () => {
         const { status, body } = await getResponse(path);
@@ -28,7 +28,7 @@ export const testGetItem = <SourceType extends DatabaseObject<string>, ExpectedT
 
         expect(status).toBe(HTTP_STATUS.NOT_FOUND);
         expect((body as ResourceNotFoundError).code).toBe(expectedError.code);
-        expect(body as ResourceNotFoundError).toBe(expectedError.data);
+        expect((body as ResourceNotFoundError).data).toBe(expectedError.data);
       });
     }
   );
