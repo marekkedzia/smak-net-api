@@ -6,11 +6,12 @@ import { validate } from "../../utils/validator";
 import { productValidator } from "./product.validator";
 import { ParameterizedContext } from "koa";
 import { HTTP_STATUS } from "../../utils/constants/http.statuses";
+import { paths } from "../../config/variables.config";
 
 @Route("/product")
 export class ProductRouter extends InternalRouter {
   constructor(private productService: ProductService) {
-    super("/product");
+    super(paths.product);
 
     this.router.post("/", validate(productValidator), async (ctx: ParameterizedContext) => {
       ctx.body = await this.addProduct(ctx.request.body);

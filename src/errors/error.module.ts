@@ -52,6 +52,15 @@ export class ResourceNotFoundError implements AppError {
   }
 }
 
+export class FilesUploadFailed implements AppError {
+  status = HTTP_STATUS.BAD_REQUEST;
+  code = ErrorCodes.FILES_UPLOAD_FAILED;
+  data = ErrorDatas.FILES_UPLOAD_FAILED;
+
+  constructor(private reason:unknown) {
+  }
+}
+
 export class ResourceNotPartOfRequest implements AppError {
   status = HTTP_STATUS.BAD_REQUEST;
   code = ErrorCodes.RESOURCE_NOT_PART_OF_REQUEST;
