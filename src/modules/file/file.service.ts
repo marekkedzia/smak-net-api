@@ -4,13 +4,15 @@ import { UserId } from "../../utils/schemas/user.id";
 import { internalLocalStorage } from "../../config/internal.local.storage.config";
 import { Next, ParameterizedContext } from "koa";
 import busboy from "busboy";
-import { FailedUploads, FileRequest, FileKey, FileInfo, FileId } from "./file.interfaces";
+import { FailedUploads, FileId, FileInfo, FileKey, FileRequest } from "./file.interfaces";
 import { variablesConfig } from "../../config/variables.config";
-import { FilesUploadFailed } from "../../errors/error.module";
+import { FilesUploadFailed, ResourceNotFoundError } from "../../errors/error.module";
 import { IdUtils } from "../../utils/id.utils";
 import { DateUtils } from "../../utils/date.utils";
 import { FileRepository } from "./file.repository";
-import { ProductId } from "../product/product.interfaces";
+import { Product, ProductId } from "../product/product.interfaces";
+import { ProductRepository } from "../product/product.repository";
+import { Resource } from "../../utils/constants/resources.names";
 
 
 export class FileService {
@@ -24,7 +26,7 @@ export class FileService {
       logger.debug(`Lab results upload confirmed for patient: ${userId}.`);
     }
 
-    logger.info(`Lab results upload finished for patient: ${userId}.
+    logger.info(`Upload finished for user: ${userId}.
     Failed uploads: ${JSON.stringify(failedUploads)}.
     Succeeded uploads: ${JSON.stringify(uploadedFiles)}.`
     );
@@ -33,8 +35,12 @@ export class FileService {
       throw new FilesUploadFailed({ failedUploads, succeededUploads: uploadedFiles });
   };
 
-  private handleDocumentUpload = async (stream: Readable, userId: UserId, fileRequest: FileRequest, productId: ProductId): Promise<{ fileId: FileId, fileKey: FileKey }> => {
+  private handleFileUpload = async (stream: Readable, userId: UserId, fileRequest: FileRequest, productId: ProductId): Promise<{ fileId: FileId, fileKey: FileKey }> => {
     const fileKey: FileKey = IdUtils.provideFileKey(userId, fileRequest.mimeType, fileRequest.name);
+    // const product: Product | null = await ProductRepository.findOne(productId);
+    //
+    // if (!product)
+    //   throw new ResourceNotFoundError(Resource.PRODUCT);
 
     const file: FileInfo = {
       id: IdUtils.provideFileId(),
@@ -53,7 +59,7 @@ export class FileService {
     return { fileId: file.id, fileKey: file.key };
   };
 
-  streamDocument = (ctx: ParameterizedContext, next: Next): void => {
+  streamFile = async (ctx: ParameterizedContext, next: Next): Promise<void> => {
     try {
       let receivedFilesNumber = 0;
       const userId: UserId = internalLocalStorage.getUserId();
@@ -69,7 +75,7 @@ export class FileService {
           return stream.resume();
         }
 
-        this.handleDocumentUpload(stream, userId, info, ctx.params.productId)
+        this.handleFileUpload(stream, userId, info, ctx.params.productId)
           .then(() => {
             uploadedFiles.push(name);
             stream.resume();
@@ -82,9 +88,7 @@ export class FileService {
       });
 
       bb.on("close", async () => {
-        ctx.failedUploads = failedUploads;
-        ctx.uploadedFiles = uploadedFiles;
-
+        await this.confirmFileUpload(uploadedFiles, failedUploads);
         return next();
       });
 

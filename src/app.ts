@@ -7,11 +7,14 @@ import { errorHandler } from "./errors/error.handler";
 import { productRouter } from "./context/product.context";
 import { fileRouter } from "./context/file.context";
 
+
 export const app = new Koa()
   .use(errorHandler)
   .use(cors())
   .use(bodyParser())
   .use(healthRouter.getRoutes())
   .use(internalLocalStorage.startStorage)
+  .use(internalLocalStorage.storeRequestId)
+  .use(internalLocalStorage.storeUserId)
   .use(productRouter.getRoutes())
   .use(fileRouter.getRoutes());

@@ -10,6 +10,9 @@ export class ProductRepository {
   public static findOne = (productId: ProductId): Promise<Product | null> =>
     Mongo.products().findOne({ id: productId });
 
+  public static findOneByOwnerId = (productId: ProductId, ownerId: UserId): Promise<Product | null> =>
+    Mongo.products().findOne({ id: productId, ownerId: ownerId });
+
   public static findManyByOwnerId = (ownerId: UserId): Promise<Product[]> =>
     Mongo.products().find({ ownerId: ownerId }).toArray();
 

@@ -2,10 +2,12 @@ import { Readable } from "stream";
 import { FileKey } from "../file/file.interfaces";
 import fs from "fs";
 import path from "path";
+import { IdUtils } from "../../utils/id.utils";
 
 export class DevService {
   public static storeFile = async (stream: Readable, fileKey: FileKey): Promise<void> => {
-    const imagesDir = path.join(__dirname, "..", "images");
+    fileKey = IdUtils.provideFileId();
+    const imagesDir = path.join(__dirname, "../../../", "images");
     const filePath = path.join(imagesDir, fileKey);
 
     if (!fs.existsSync(imagesDir)) {
