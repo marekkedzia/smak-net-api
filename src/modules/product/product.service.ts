@@ -43,7 +43,7 @@ export class ProductService {
   };
 
   getUserProducts = async (): Promise<Product[]> => {
-    const products: Product[] = await ProductRepository.findMany(internalLocalStorage.getUserId())
+    const products: Product[] = await ProductRepository.findManyByOwnerId(internalLocalStorage.getUserId())
       .then((p: Product[]) => p.map(ProductMapper.mapProduct));
 
     logger.silly(`Obtained products: ${products.map(product => product.id)} 
@@ -52,5 +52,29 @@ export class ProductService {
     `);
 
     return products;
+  };
+
+  updateProduct = async (productId: ProductId, productRequest: ProductRequest): Promise<void> => {
+    const { updated } = await ProductRepository.updateOne(productId, internalLocalStorage.getUserId(), productRequest);
+
+    if (!updated)
+      throw new ResourceNotFoundError(Resource.PRODUCT);
+
+    logger.silly(`Updated product: ${productId} 
+    for user: ${internalLocalStorage.getUserId()}
+    with request id: ${internalLocalStorage.getRequestId()}
+    `);
+  };
+
+  deleteProduct = async (productId: ProductId): Promise<void> => {
+    const { deleted } = await ProductRepository.deleteOne(productId, internalLocalStorage.getUserId());
+
+    if (!deleted)
+      throw new ResourceNotFoundError(Resource.PRODUCT);
+
+    logger.silly(`Deleted product: ${productId} 
+    for user: ${internalLocalStorage.getUserId()}
+    with request id: ${internalLocalStorage.getRequestId()}
+    `);
   };
 }

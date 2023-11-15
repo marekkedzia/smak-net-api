@@ -49,3 +49,15 @@ export const obtainTestPutResponse = async (router: InternalRouter, path: string
 
   return { status, body };
 };
+
+export const obtainTestDeleteResponse = async (router: InternalRouter, path: string): Promise<Response> => { //TODO move to another file
+  const app = generateTestApp(router).listen();
+
+  const { status, body } = await supertest(app)
+    .delete(path)
+    .send();
+
+  app.close();
+
+  return { status, body };
+};
