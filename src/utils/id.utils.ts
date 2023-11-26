@@ -12,7 +12,7 @@ export class IdUtils {
   public static provideRequestId = (): RequestId => `${IdPrefix.REQUEST_ID}-${this.provideId()}` as RequestId;
   public static provideProductId = (): ProductId => `${IdPrefix.PRODUCT_ID}-${this.provideId()}` as ProductId;
   public static provideFileId = (): FileId => `${IdPrefix.FILE_KEY}-${this.provideId()}` as FileId;
-  public static provideFileKey = (userId: string, mimeType: string, fileName: string): FileKey => `${userId}-${fileName}${this.provideId()}.${mimeType}` as FileKey;
+  public static provideFileKey = (userId: string, mimeType: string, fileName: string): FileKey => `${userId}-${fileName}-${this.provideId()}.${mimeType}` as FileKey;
 }
 
 enum IdPrefix {

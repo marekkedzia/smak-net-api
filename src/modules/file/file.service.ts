@@ -4,7 +4,15 @@ import { UserId } from "../../utils/schemas/user.id";
 import { internalLocalStorage } from "../../config/internal.local.storage.config";
 import { Next, ParameterizedContext } from "koa";
 import busboy from "busboy";
-import { FailedUploads, FileId, FileInfo, FileKey, FileRequest } from "./file.interfaces";
+import {
+  FailedUploads,
+  FileDownloadResult,
+  FileId,
+  FileInfo,
+  FileKey,
+  FileRequest,
+  FileUploadResult
+} from "./file.interfaces";
 import { variablesConfig } from "../../config/variables.config";
 import { FilesUploadFailed, ResourceNotFoundError } from "../../errors/error.module";
 import { IdUtils } from "../../utils/id.utils";
@@ -16,10 +24,13 @@ import { Resource } from "../../utils/constants/resources.names";
 
 
 export class FileService {
-  constructor(private storeFile: (stream: Readable, fileKey: FileKey) => Promise<void>) {
+  constructor(
+    private storeFile: (stream: Readable, fileKey: FileKey) => Promise<void>,
+    private downloadFile: (fileKey: FileKey) => Promise<Readable>
+  ) {
   }
 
-  confirmFileUpload = async (uploadedFiles: string[], failedUploads: FailedUploads): Promise<void> => {
+  handleProductImageUpload = async (uploadedFiles: string[], failedUploads: FailedUploads): Promise<void> => {
     const userId: UserId = internalLocalStorage.getUserId();
 
     if (uploadedFiles.length > 0) {
@@ -35,19 +46,29 @@ export class FileService {
       throw new FilesUploadFailed({ failedUploads, succeededUploads: uploadedFiles });
   };
 
-  private handleFileUpload = async (stream: Readable, userId: UserId, fileRequest: FileRequest, productId: ProductId): Promise<{ fileId: FileId, fileKey: FileKey }> => {
-    const fileKey: FileKey = IdUtils.provideFileKey(userId, fileRequest.mimeType, fileRequest.name);
-    // const product: Product | null = await ProductRepository.findOne(productId);
-    //
-    // if (!product)
-    //   throw new ResourceNotFoundError(Resource.PRODUCT);
+  handleFileDownload = async (fileId: FileId): Promise<FileDownloadResult> => {
+    const file: FileInfo | null = await FileRepository.findOneById(fileId);
+
+    if (!file)
+      throw new ResourceNotFoundError(Resource.FILE);
+
+    logger.debug(`File download started: ${file.id} for user: ${internalLocalStorage.getUserId()} with request ${internalLocalStorage.getRequestId()}.`);
+    return { content: await this.downloadFile(file.key), mimeType: file.mimeType };
+  };
+
+  handleSingleProductImageUpload = async (stream: Readable, userId: UserId, fileRequest: FileRequest, productId: ProductId): Promise<FileUploadResult> => {
+    const fileKey: FileKey = IdUtils.provideFileKey(userId, fileRequest.mimeType, fileRequest.filename);
+    const product: Product | null = await ProductRepository.findOne(productId);
+
+    if (!product)
+      throw new ResourceNotFoundError(Resource.PRODUCT); //TODO fix async error throwing in koa while streaming
 
     const file: FileInfo = {
       id: IdUtils.provideFileId(),
       ownerId: userId,
       createdAt: DateUtils.getDateNow(),
       key: fileKey,
-      productId,
+      resourceId: productId,
       ...fileRequest
     };
 
@@ -59,43 +80,55 @@ export class FileService {
     return { fileId: file.id, fileKey: file.key };
   };
 
-  streamFile = async (ctx: ParameterizedContext, next: Next): Promise<void> => {
-    try {
-      let receivedFilesNumber = 0;
-      const userId: UserId = internalLocalStorage.getUserId();
-      const uploadedFiles: string[] = [];
-      const failedUploads: FailedUploads = {};
-      const bb = busboy({ headers: ctx.request.headers });
+  streamFile = (fileUploadedHandler: (uploadedFiles: string[], failedUploads: FailedUploads) => Promise<void>,
+                singleFileUploadHandler: (stream: Readable, userId: UserId, fileRequest: FileRequest, resourceId: string) => Promise<FileUploadResult>) =>
+    async (ctx: ParameterizedContext, next: Next): Promise<void> => {
+      try {
+        let receivedFilesNumber = 0;
+        const userId: UserId = internalLocalStorage.getUserId();
+        const uploadedFiles: string[] = [];
+        const failedUploads: FailedUploads = {};
+        const bb = busboy({ headers: ctx.request.headers });
 
-      bb.on("file", (name: string, stream: Readable, info: FileRequest) => {
-        receivedFilesNumber++;
+        bb.on("file", (_: string, stream: Readable, info: FileRequest) => {
+          info.mimeType = this.mapMimeTypeOrThrowError(info.mimeType);
+          receivedFilesNumber++;
 
-        if (receivedFilesNumber > variablesConfig.maxFilesUploadNumber) {
-          failedUploads[name] = variablesConfig.maxFilesNumberExceededMessage;
-          return stream.resume();
-        }
+          if (receivedFilesNumber > variablesConfig.maxFilesUploadNumber) {
+            failedUploads[info.filename] = variablesConfig.maxFilesNumberExceededMessage;
+            return stream.resume();
+          }
 
-        this.handleFileUpload(stream, userId, info, ctx.params.productId)
-          .then(() => {
-            uploadedFiles.push(name);
-            stream.resume();
-          })
-          .catch(err => {
-            logger.error(err);
-            failedUploads[name] = variablesConfig.serverCannotHandleFileUploadMessage;
-            stream.resume();
-          });
-      });
+          singleFileUploadHandler(stream, userId, info, ctx.params.resourceId)
+            .then(() => {
+              uploadedFiles.push(info.filename);
+              stream.resume();
+            })
+            .catch(err => {
+              logger.error(err);
+              failedUploads[info.filename] = variablesConfig.serverCannotHandleFileUploadMessage;
+              stream.resume();
+            });
+        });
 
-      bb.on("close", async () => {
-        await this.confirmFileUpload(uploadedFiles, failedUploads);
-        return next();
-      });
+        bb.on("close", async () => {
+          await fileUploadedHandler(uploadedFiles, failedUploads);
+          return next();
+        });
 
-      ctx.req.pipe(bb);
-    } catch (err) {
-      logger.error(`File upload failed: ${err}`);
-      throw new FilesUploadFailed(err.message);
-    }
+        ctx.req.pipe(bb);
+      } catch (err) {
+        logger.error(`File upload failed: ${err}`);
+        throw new FilesUploadFailed(err.message);
+      }
+    };
+
+  private mapMimeTypeOrThrowError = (mimeType: string): string => {
+    const mappedMimeType: string | undefined = mimeType.split(variablesConfig.mimeTypeSplitter).pop();
+
+    if (!mappedMimeType)
+      throw new ResourceNotFoundError(Resource.MIME_TYPE);
+
+    return mappedMimeType;
   };
 }
