@@ -1,12 +1,9 @@
 import { z as zod } from "zod";
-import { variablesConfig } from "../../config/variables.config";
-import { CATEGORY } from './product.interfaces';
-
-const categoryValues = Object.values(CATEGORY) as [string, ...string[]];
+import { CATEGORY, variablesConfig } from '../../config/variables.config';
 
 export const productValidator = zod.object({
     name: zod.string().max(variablesConfig.maxProductNameLength).nonempty(),
-    category: zod.enum(categoryValues),
+    category: zod.nativeEnum(CATEGORY),
     description: zod.string().max(variablesConfig.maxProductDescriptionLength).nonempty(),
     price: zod.number().positive()
   }

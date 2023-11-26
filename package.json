@@ -8,6 +8,7 @@
     "dev": "NODE_ENV=development nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'ts-node' src/index.ts",
     "dev:windows": "SET NODE_ENV=development&& nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec \"ts-node\" src/index.ts",
     "test": "NODE_ENV=test && tsc && jest --runInBand",
+    "test:windows": "SET NODE_ENV=test&& tsc&& jest --runInBand",
     "build": "tsc",
     "lint": "eslint . --ext .ts",
     "docs": "tsoa spec"
