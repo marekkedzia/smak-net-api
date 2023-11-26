@@ -25,7 +25,7 @@ export class ProductRepository {
         ownerId: ownerId
       },
       {
-        $set: { description: product.description, name: product.name, price: product.price }
+        $set: { description: product.description, name: product.name, price: product.price, category: product.category }
       }
     ).then(result => ({ updated: result.modifiedCount === 1 }));
 
