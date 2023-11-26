@@ -42,6 +42,7 @@ export class ProductRouter extends InternalRouter {
    * Validator requirements:
    * - name: required, string, max length 255
    * - description: required, string, max length 2048
+   * - category: required, [FRUIT, VEGETABLE, DAIRY, MEAT, BREAD, DRINKS, SNACKS, OTHER]
    * - price: required, number, positive
    */
   @OperationId("add product")
