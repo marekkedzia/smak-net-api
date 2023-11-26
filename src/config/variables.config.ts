@@ -4,6 +4,7 @@ export const variablesConfig = {
   maxFilesNumberExceededMessage: "Max files number exceeded",
   serverCannotHandleFileUploadMessage: "Server cannot handle file upload",
   maxFilesUploadNumber: 10,
+  mimeTypeSplitter: "/"
 };
 
 export const paths = {

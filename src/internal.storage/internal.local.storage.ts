@@ -7,7 +7,7 @@ import { RequestId } from "../utils/schemas/request.id";
 import { IdUtils } from "../utils/id.utils";
 
 export class InternalLocalStorage {
-  localStorage: AsyncLocalStorage<Map<string, string>> = new AsyncLocalStorage<Map<string, any>>();
+  localStorage: AsyncLocalStorage<Map<string, string>> = new AsyncLocalStorage<Map<string, string>>();
 
   startStorage = async (ctx: Context, next: Next): Promise<void> => {
     await this.localStorage.run(new Map(), async () => await next());
