@@ -9,7 +9,7 @@ import { FileRouter } from "../../../../src/modules/file/file.router";
 describe("test get file endpoint", () => {
     const fileId = "some-file-id";
     const fileService = new FileService(jest.fn(), jest.fn().mockResolvedValue({}));
-    const fileRouter = new FileRouter(fileService);
+    const fileRouter = new FileRouter(fileService, {handleProductImageUpload: jest.fn(), validateImageUploadAccess: jest.fn()});
 
     Mongo.files = jest.fn().mockImplementation(() => ({
         findOne: jest.fn().mockImplementation((query) => {

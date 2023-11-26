@@ -4,11 +4,17 @@ import { FileService } from "./file.service";
 import { paths } from "../../config/variables.config";
 import { HTTP_STATUS } from "../../utils/constants/http.statuses";
 import { Next, ParameterizedContext } from "koa";
-import { FileDownloadResult, FileId } from "./file.interfaces";
+import { FailedUploads, FileDownloadResult, FileId, } from "./file.interfaces";
+import { ProductId } from "../product/product.interfaces";
+
+type ProductImageHandlers = {
+  handleProductImageUpload: (uploadedFiles: string[], failedUploads: FailedUploads) => Promise<void>;
+  validateImageUploadAccess: (productId: ProductId) => Promise<void>;
+}
 
 @Route("/file")
 export class FileRouter extends InternalRouter {
-  constructor(private fileService: FileService) {
+  constructor(private fileService: FileService, private productImageHandlers: ProductImageHandlers) {
     super(paths.file);
 
     this.router.post(`${paths.product}/:productId`,
@@ -37,7 +43,7 @@ export class FileRouter extends InternalRouter {
   @Security("jwt", ["admin"])
   @Post("/product/:productId")
   streamProductImage(ctx: ParameterizedContext, next: Next): Promise<void> {
-    return this.fileService.streamFile(this.fileService.handleProductImageUpload, this.fileService.handleSingleProductImageUpload)(ctx, next);
+    return this.fileService.streamFile(this.productImageHandlers.handleProductImageUpload, this.productImageHandlers.validateImageUploadAccess)(ctx, next);
   }
 
   /**

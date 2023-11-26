@@ -18,8 +18,6 @@ import { FilesUploadFailed, ResourceNotFoundError } from "../../errors/error.mod
 import { IdUtils } from "../../utils/id.utils";
 import { DateUtils } from "../../utils/date.utils";
 import { FileRepository } from "./file.repository";
-import { Product, ProductId } from "../product/product.interfaces";
-import { ProductRepository } from "../product/product.repository";
 import { Resource } from "../../utils/constants/resources.names";
 
 
@@ -29,22 +27,6 @@ export class FileService {
     private downloadFile: (fileKey: FileKey) => Promise<Readable>
   ) {
   }
-
-  handleProductImageUpload = async (uploadedFiles: string[], failedUploads: FailedUploads): Promise<void> => {
-    const userId: UserId = internalLocalStorage.getUserId();
-
-    if (uploadedFiles.length > 0) {
-      logger.debug(`Lab results upload confirmed for patient: ${userId}.`);
-    }
-
-    logger.info(`Upload finished for user: ${userId}.
-    Failed uploads: ${JSON.stringify(failedUploads)}.
-    Succeeded uploads: ${JSON.stringify(uploadedFiles)}.`
-    );
-
-    if (Object.values(failedUploads).length !== 0)
-      throw new FilesUploadFailed({ failedUploads, succeededUploads: uploadedFiles });
-  };
 
   handleFileDownload = async (fileId: FileId): Promise<FileDownloadResult> => {
     const file: FileInfo | null = await FileRepository.findOneById(fileId);
@@ -56,32 +38,32 @@ export class FileService {
     return { content: await this.downloadFile(file.key), mimeType: file.mimeType };
   };
 
-  handleSingleProductImageUpload = async (stream: Readable, userId: UserId, fileRequest: FileRequest, productId: ProductId): Promise<FileUploadResult> => {
-    const fileKey: FileKey = IdUtils.provideFileKey(userId, fileRequest.mimeType, fileRequest.filename);
-    const product: Product | null = await ProductRepository.findOne(productId);
+  private handleSingleFileUpload =
+    (validateFileUploadAccess: (resourceId: string) => Promise<void>) =>
+      async (stream: Readable, userId: UserId, fileRequest: FileRequest, resourceId: string): Promise<FileUploadResult> => {
+        const fileKey: FileKey = IdUtils.provideFileKey(userId, fileRequest.mimeType, fileRequest.filename);
 
-    if (!product)
-      throw new ResourceNotFoundError(Resource.PRODUCT); //TODO fix async error throwing in koa while streaming
+        await validateFileUploadAccess(resourceId);
 
-    const file: FileInfo = {
-      id: IdUtils.provideFileId(),
-      ownerId: userId,
-      createdAt: DateUtils.getDateNow(),
-      key: fileKey,
-      resourceId: productId,
-      ...fileRequest
-    };
+        const file: FileInfo = {
+          id: IdUtils.provideFileId(),
+          ownerId: userId,
+          createdAt: DateUtils.getDateNow(),
+          key: fileKey,
+          resourceId,
+          ...fileRequest
+        };
 
-    await this.storeFile(stream, fileKey);
-    logger.debug(`File uploaded: ${file.id} for user: ${userId} with request ${internalLocalStorage.getRequestId()}.`);
-    await FileRepository.createFileInfo(file);
-    logger.silly(`File info created: ${file.id} for user: ${userId} with request ${internalLocalStorage.getRequestId()}.`);
+        await this.storeFile(stream, fileKey);
+        logger.debug(`File uploaded: ${file.id} for user: ${userId} with request ${internalLocalStorage.getRequestId()}.`);
+        await FileRepository.createFileInfo(file);
+        logger.silly(`File info created: ${file.id} for user: ${userId} with request ${internalLocalStorage.getRequestId()}.`);
 
-    return { fileId: file.id, fileKey: file.key };
-  };
+        return { fileId: file.id, fileKey: file.key };
+      };
 
   streamFile = (fileUploadedHandler: (uploadedFiles: string[], failedUploads: FailedUploads) => Promise<void>,
-                singleFileUploadHandler: (stream: Readable, userId: UserId, fileRequest: FileRequest, resourceId: string) => Promise<FileUploadResult>) =>
+                validateFileUploadAccess: (resourceId: string) => Promise<void>) =>
     async (ctx: ParameterizedContext, next: Next): Promise<void> => {
       try {
         let receivedFilesNumber = 0;
@@ -99,7 +81,7 @@ export class FileService {
             return stream.resume();
           }
 
-          singleFileUploadHandler(stream, userId, info, ctx.params.resourceId)
+          this.handleSingleFileUpload(validateFileUploadAccess)(stream, userId, info, ctx.params.resourceId)
             .then(() => {
               uploadedFiles.push(info.filename);
               stream.resume();
