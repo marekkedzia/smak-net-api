@@ -13,8 +13,8 @@ export const app = new Koa()
   .use(cors())
   .use(bodyParser())
   .use(healthRouter.getRoutes())
-  .use(internalLocalStorage.startStorage)
-  .use(internalLocalStorage.storeRequestId)
-  .use(internalLocalStorage.storeUserId)
+  .use(async (ctx, next) => {
+    await internalLocalStorage.startStorage(ctx, next);
+  })
   .use(productRouter.getRoutes())
   .use(fileRouter.getRoutes());

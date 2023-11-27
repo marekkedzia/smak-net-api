@@ -7,31 +7,24 @@ import { RequestId } from "../utils/schemas/request.id";
 import { IdUtils } from "../utils/id.utils";
 
 export class InternalLocalStorage {
-  localStorage: AsyncLocalStorage<Map<string, string>> = new AsyncLocalStorage<Map<string, string>>();
+  localStorage: AsyncLocalStorage<{ [key: string]: string }> = new AsyncLocalStorage<{ [key: string]: string }>();
+
+  constructor() {
+    this.localStorage = new AsyncLocalStorage<{ [key: string]: string }>();
+  }
 
   startStorage = async (ctx: Context, next: Next): Promise<void> => {
-    await this.localStorage.run(new Map(), async () => await next());
+    await this.localStorage.run({
+      "requestId": IdUtils.provideRequestId().toString(),
+      "userId": "DUMMY_USER_ID"
+    }, async () => await next());
   };
 
-  storeRequestId = async (ctx: Context, next: Next): Promise<void> => {
-    this.getStore().set("requestId", IdUtils.provideRequestId());
-    await next();
-  };
+  getRequestId = (): RequestId => this.getStore()["requestId"] as RequestId;
 
-  storeUserId = async (ctx: Context, next: Next): Promise<void> => {
-    const setUserId = (userId: UserId): void => {
-      this.getStore().set("userId", userId);
-    };
+  getUserId = (): UserId => this.getStore()["userId"] as UserId;
 
-    setUserId("DUMMY_USER_ID" as UserId); //TODO
-    await next();
-  };
-
-  getRequestId = (): RequestId => this.getStore().get("requestId");
-
-  getUserId = (): UserId => this.getStore().get("userId");
-
-  private getStore = (): Map<string, any> => {
+  private getStore = (): { [key: string]: string } => {
     const store = this.localStorage.getStore();
 
     if (!store) {
@@ -41,4 +34,5 @@ export class InternalLocalStorage {
 
     return store;
   };
+
 }
