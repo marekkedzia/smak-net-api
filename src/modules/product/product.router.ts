@@ -2,7 +2,7 @@ import { InternalRouter } from "../../utils/schemas/router";
 import { Body, Delete, Get, OperationId, Post, Put, Route, Security } from "tsoa";
 import { ProductService } from "./product.service";
 import { Product, ProductId, ProductRequest } from "./product.interfaces";
-import { validate } from "../../utils/validator";
+import { validateBody } from "../../utils/validator";
 import { productValidator } from "./product.validator";
 import { ParameterizedContext } from "koa";
 import { HTTP_STATUS } from "../../utils/constants/http.statuses";
@@ -13,7 +13,7 @@ export class ProductRouter extends InternalRouter {
   constructor(private productService: ProductService) {
     super(paths.product);
 
-    this.router.post("/", validate(productValidator), async (ctx: ParameterizedContext) => {
+    this.router.post("/", validateBody(productValidator), async (ctx: ParameterizedContext) => {
       ctx.body = await this.addProduct(ctx.request.body);
       ctx.status = HTTP_STATUS.CREATED;
     });
@@ -26,7 +26,7 @@ export class ProductRouter extends InternalRouter {
       ctx.body = await this.getUserProducts();
     });
 
-    this.router.put("/:productId", validate(productValidator), async (ctx: ParameterizedContext) => {
+    this.router.put("/:productId", validateBody(productValidator), async (ctx: ParameterizedContext) => {
       await this.updateProduct(ctx.params.productId, ctx.request.body);
       ctx.status = HTTP_STATUS.NO_CONTENT;
     });
@@ -58,8 +58,8 @@ export class ProductRouter extends InternalRouter {
   @OperationId("get product")
   @Security("jwt", ["user:read"])
   @Get("/{productId}")
-  getProduct(productId: ProductId): Promise<Product> {
-    return this.productService.getProduct(productId);
+  getProduct(productId: string): Promise<Product> {
+    return this.productService.getProduct(productId as ProductId);
   }
 
   /**
@@ -78,8 +78,8 @@ export class ProductRouter extends InternalRouter {
   @OperationId("update product")
   @Security("jwt", ["admin"])
   @Put("/{productId}")
-  updateProduct(productId: ProductId, @Body() productRequest: ProductRequest): Promise<void> {
-    return this.productService.updateProduct(productId, productRequest);
+  updateProduct(productId: string, @Body() productRequest: ProductRequest): Promise<void> {
+    return this.productService.updateProduct(productId as ProductId, productRequest);
   }
 
   /**
@@ -88,7 +88,7 @@ export class ProductRouter extends InternalRouter {
   @OperationId("delete product")
   @Security("jwt", ["admin"])
   @Delete("/{productId}")
-  deleteProduct(productId: ProductId): Promise<void> {
-    return this.productService.deleteProduct(productId);
+  deleteProduct(productId: string): Promise<void> {
+    return this.productService.deleteProduct(productId as ProductId);
   }
 }

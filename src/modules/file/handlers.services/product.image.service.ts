@@ -1,8 +1,8 @@
-import { FailedUploads } from "./file.interfaces";
-import { UserId } from "../../utils/schemas/user.id";
-import { internalLocalStorage } from "../../config/internal.local.storage.config";
-import { logger } from "../../utils/logger";
-import { FilesUploadFailed } from "../../errors/error.module";
+import { FailedUploads } from "../file.interfaces";
+import { UserId } from "../../../utils/schemas/user.id";
+import { internalLocalStorage } from "../../../config/internal.local.storage.config";
+import { logger } from "../../../utils/logger";
+import { FilesUploadFailed } from "../../../errors/error.module";
 
 export class ProductImageService {
   handleProductImageUpload = async (uploadedFiles: string[], failedUploads: FailedUploads): Promise<void> => {

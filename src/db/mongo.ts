@@ -1,6 +1,7 @@
 import { Db, Document, MongoClient } from "mongodb";
 import { Product } from "../modules/product/product.interfaces";
 import { FileInfo } from "../modules/file/file.interfaces";
+import { Cart } from "../modules/cart/cart.interfaces";
 
 export class Mongo {
   private static mongo: Db;
@@ -15,5 +16,6 @@ export class Mongo {
   public static close = () => this.client.close();
   public static products = () => this.mongoCollection<Product>("products");
   public static files = () => this.mongoCollection<FileInfo>("files");
+  public static carts = () => this.mongoCollection<Cart>("carts");
   private static mongoCollection = <T extends Document>(name: string) => this.mongo.collection<T>(name);
 }

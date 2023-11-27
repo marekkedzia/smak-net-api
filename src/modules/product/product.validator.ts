@@ -1,8 +1,8 @@
 import { z as zod } from "zod";
 import { CATEGORY, variablesConfig } from '../../config/variables.config';
-import { mapToString } from '../../utils/map.to.string';
+import { mapValuesToString } from '../../utils/map.to.string';
 
-const categoriesAsStrings = mapToString(CATEGORY);
+const categoriesAsStrings = mapValuesToString(CATEGORY);
 
 export const productValidator = zod.object({
     name: zod.string().max(variablesConfig.maxProductNameLength).nonempty(),

@@ -9,7 +9,8 @@ export const variablesConfig = {
 
 export const paths = {
   file: "/file",
-  product: "/product"
+  product: "/product",
+  cart: "/cart"
 };
 
 export enum CATEGORY {
