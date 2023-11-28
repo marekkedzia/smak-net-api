@@ -34,7 +34,7 @@ export class FileService {
     if (!file)
       throw new ResourceNotFoundError(Resource.FILE);
 
-    logger.debug(`File download started: ${file.id} for user: ${internalLocalStorage.getUserId()} with request ${internalLocalStorage.getRequestId()}.`);
+    logger.silly(`File download started: ${file.id} for user: ${internalLocalStorage.getUserId()} with request ${internalLocalStorage.getRequestId()}.`);
     return { content: await this.downloadFile(file.key), mimeType: file.mimeType };
   };
 
@@ -55,9 +55,9 @@ export class FileService {
         };
 
         await this.storeFile(stream, fileKey);
-        logger.debug(`File uploaded: ${file.id} for user: ${userId} with request ${internalLocalStorage.getRequestId()}.`);
+        logger.silly(`File uploaded: ${file.id}.`);
         await FileRepository.createFileInfo(file);
-        logger.silly(`File info created: ${file.id} for user: ${userId} with request ${internalLocalStorage.getRequestId()}.`);
+        logger.silly(`File info created: ${file.id}`);
 
         return { fileId: file.id, fileKey: file.key };
       };

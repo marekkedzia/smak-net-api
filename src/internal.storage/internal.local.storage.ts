@@ -14,10 +14,10 @@ export class InternalLocalStorage {
   }
 
   startStorage = async (ctx: Context, next: Next): Promise<void> => {
-    await this.localStorage.run({
-      "requestId": IdUtils.provideRequestId().toString(),
-      "userId": "DUMMY_USER_ID"
-    }, async () => await next());
+      await this.localStorage.run({
+        "requestId": IdUtils.provideRequestId().toString(),
+        "userId": "DUMMY_USER_ID"
+      }, next);
   };
 
   getRequestId = (): RequestId => this.getStore()["requestId"] as RequestId;
