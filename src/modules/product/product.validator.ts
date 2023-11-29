@@ -1,4 +1,4 @@
-import { z as zod } from "zod";
+import * as zod from "zod";
 import { CATEGORY, variablesConfig } from '../../config/variables.config';
 import { mapValuesToString } from '../../utils/map.to.string';
 

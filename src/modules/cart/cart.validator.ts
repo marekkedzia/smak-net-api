@@ -1,4 +1,4 @@
-import { z as zod } from "zod/lib";
+import { z as zod } from "zod";
 import { mapValuesToString } from "../../utils/map.to.string";
 import { CartState } from "./cart.interfaces";
 
