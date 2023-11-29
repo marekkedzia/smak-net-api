@@ -38,6 +38,9 @@ export class FileService {
     return { content: await this.downloadFile(file.key), mimeType: file.mimeType };
   };
 
+  getResourceFiles = (resourceId: string): Promise<FileInfo[]> =>
+    FileRepository.findManyByResourceId(resourceId);
+
   private handleSingleFileUpload =
     (validateFileUploadAccess: (resourceId: string) => Promise<void>) =>
       async (stream: Readable, userId: UserId, fileRequest: FileRequest, resourceId: string): Promise<FileUploadResult> => {
