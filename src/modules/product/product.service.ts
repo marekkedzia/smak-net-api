@@ -77,4 +77,7 @@ export class ProductService {
     with request id: ${internalLocalStorage.getRequestId()}
     `);
   };
+
+  isProductAvailable = async (productId: ProductId): Promise<boolean> =>
+    ProductRepository.findOne(productId).then((product: Product | null) => !!product);
 }
