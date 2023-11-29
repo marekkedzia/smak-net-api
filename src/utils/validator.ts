@@ -1,8 +1,11 @@
-import { ZodObject } from "zod";
+import * as zod from "zod";
 import { Context, Next } from "koa";
 import { logger } from "./logger";
 import { ValidationErrors } from "../errors/error.module";
 import { internalLocalStorage } from "../config/internal.local.storage.config";
+import { UnknownKeysParam, ZodRawShape } from "zod";
+
+type ZodObject<T extends ZodRawShape, Z extends UnknownKeysParam> = zod.ZodObject<T, Z>;
 
 export const validateBody = (object: ZodObject<any, any>) => (ctx: Context, next: Next) => {
   try {

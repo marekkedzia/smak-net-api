@@ -8,7 +8,7 @@
     "moduleResolution": "node",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": ".",
+    "baseUrl": "",
     "skipLibCheck": true,
     "allowJs": true,
     "resolveJsonModule": true,
@@ -23,7 +23,6 @@
   "include": [
     "src/**/*",
     "src/**/*.json",
-    "tests/**/*"
   ],
   "exclude": [
     "node_modules/**"
