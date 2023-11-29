@@ -84,7 +84,7 @@ export class FileService {
             return stream.resume();
           }
 
-          this.handleSingleFileUpload(validateFileUploadAccess)(stream, userId, info, ctx.params.resourceId)
+          this.handleSingleFileUpload(validateFileUploadAccess)(stream, userId, info, ctx.params.productId)
             .then(() => {
               uploadedFiles.push(info.filename);
               stream.resume();
