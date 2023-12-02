@@ -4,7 +4,7 @@ import { FileService } from "./file.service";
 import { paths } from "../../config/variables.config";
 import { HTTP_STATUS } from "../../utils/constants/http.statuses";
 import { Next, ParameterizedContext } from "koa";
-import { FailedUploads, FileDownloadResult, FileId, } from "./file.interfaces";
+import { FailedUploads, FileDownloadResult, FileId, FileInfo } from './file.interfaces';
 import { ProductId } from "../product/product.interfaces";
 
 type ProductImageHandlers = {
@@ -29,7 +29,16 @@ export class FileRouter extends InternalRouter {
       (ctx: ParameterizedContext) =>
         this.getFile(ctx.params.fileId).then(async ({ content, mimeType }): Promise<void> => {
             ctx.body = content;
-            ctx.set("Content-Type", `application/${mimeType}`);
+            ctx.set('Content-Type', `application/${mimeType}`);
+            ctx.status = HTTP_STATUS.OK;
+          }
+        )
+    );
+
+    this.router.get(`/resource/:resourceId`,
+      (ctx: ParameterizedContext) =>
+        this.getResourceFiles(ctx.params.resourceId).then(async (files: FileInfo[]): Promise<void> => {
+            ctx.body = files;
             ctx.status = HTTP_STATUS.OK;
           }
         )
@@ -54,5 +63,15 @@ export class FileRouter extends InternalRouter {
   @Get("/{fileId}")
   getFile(@Path() fileId: string): Promise<FileDownloadResult> {
     return this.fileService.handleFileDownload(fileId as FileId);
+  }
+
+  /**
+   * Get files by resource id
+   */
+  @OperationId('get files by resource id')
+  @Security('jwt', ['user'])
+  @Get('/resource/{resourceId}')
+  getResourceFiles (@Path() resourceId: string): Promise<FileInfo[]> {
+    return this.fileService.getResourceFiles(resourceId);
   }
 }
