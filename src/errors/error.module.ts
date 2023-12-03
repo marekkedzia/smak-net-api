@@ -57,7 +57,7 @@ export class FilesUploadFailed implements AppError {
   code = ErrorCodes.FILES_UPLOAD_FAILED;
   data = ErrorDatas.FILES_UPLOAD_FAILED;
 
-  constructor(private reason:unknown) {
+  constructor(private reason: unknown) {
   }
 }
 
@@ -75,4 +75,10 @@ export class DateRangeInvalid implements AppError {
   status = HTTP_STATUS.BAD_REQUEST;
   code = ErrorCodes.INVALID_DATE_RANGE;
   data = ErrorDatas.INVALID_DATE_RANGE;
+}
+
+export class InvalidCartStateTransition implements AppError {
+  status = HTTP_STATUS.BAD_REQUEST;
+  code = ErrorCodes.INVALID_CART_STATE_TRANSITION;
+  data = ErrorDatas.INVALID_CART_STATE_TRANSITION;
 }

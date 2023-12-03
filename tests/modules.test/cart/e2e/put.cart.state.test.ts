@@ -12,7 +12,7 @@ describe("test put cart state endpoint", () => {
     Mongo.carts = jest.fn().mockReturnValue({
       findOne: jest.fn().mockImplementation(({ id }) => {
         if (id === cartId)
-          return { value: { id } };
+          return { id, state: CartState.ACTIVE };
 
         return null;
       }),
@@ -28,7 +28,7 @@ describe("test put cart state endpoint", () => {
       path: `/cart/${cartId}/state`,
       resourceName: Resource.CART,
       requiredPermission: Permission.PUT_CART_STATE,
-      validBody: { state: CartState.ACTIVE },
+      validBody: { state: CartState.INACTIVE },
       invalidPath: `/cart/invalid-cart-id/state`
     };
 

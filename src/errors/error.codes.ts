@@ -6,4 +6,5 @@ export enum ErrorCodes {
   RESOURCE_NOT_PART_OF_REQUEST = "error/resource-not-part-of-request",
   INVALID_DATE_RANGE = "error/invalid-date-range",
   FILES_UPLOAD_FAILED = "error/files-upload-failed",
+  INVALID_CART_STATE_TRANSITION = "error/invalid-cart-state-transition",
 }

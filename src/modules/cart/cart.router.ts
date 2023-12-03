@@ -7,7 +7,7 @@ import { mapStringToCartState } from "./cart.mapper";
 import { HTTP_STATUS } from "../../utils/constants/http.statuses";
 import { ParameterizedContext } from "koa";
 import { validateBody, validateQuery } from "../../utils/validator";
-import { cartProductValidator, cartStateValidator } from "./cart.validator";
+import { cartProductValidator, cartStateValidator, validateStateTransition } from "./cart.validator";
 import { ProductId } from "../product/product.interfaces";
 
 @Route("/cart")
@@ -30,7 +30,7 @@ export class CartRouter extends InternalRouter {
           ctx.status = HTTP_STATUS.OK;
         }));
 
-    this.router.put("/:cartId/state", validateBody(cartStateValidator), (ctx: ParameterizedContext) =>
+    this.router.put("/:cartId/state", validateBody(cartStateValidator), validateStateTransition, (ctx: ParameterizedContext) =>
       this.changeCartState(ctx.params.cartId, mapStringToCartState(ctx.request.body.state))
         .then(() => {
           ctx.status = HTTP_STATUS.NO_CONTENT;
