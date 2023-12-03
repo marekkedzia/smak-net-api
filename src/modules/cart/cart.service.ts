@@ -56,7 +56,16 @@ export class CartService {
     if (!await this.isProductAvailable(productId))
       throw new ResourceNotFoundError(Resource.PRODUCT);
 
-    cart.products.push({ id: productId, count });
+    if (!cart.products.find(product => product.id === productId)) {
+      cart.products.push({ id: productId, count });
+    } else {
+      cart.products = cart.products.map(product => {
+        if (product.id === productId)
+          product.count = count;
+        return product;
+      });
+    }
+
     cart.modifiedAt = DateUtils.getDateNow();
     await CartRepository.updateCart(cart);
     logger.silly(`Product: ${productId} added to cart: ${cart.id}.`);
