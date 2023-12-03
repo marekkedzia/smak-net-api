@@ -10,7 +10,7 @@ export const testDeleteItem = (
 ) => {
   describe(`DELETE ${router.path}`, () => {
       const deleteItem = (path?: string) => obtainTestDeleteResponse(router, path || testCase.path);
-      const invalidPath = `/${testCase.resourceName}/invalid`;
+      const invalidPath = testCase.invalidPath || `/${testCase.resourceName}/invalid`;
 
 
       it(`should delete ${testCase.resourceName}`, async () => {

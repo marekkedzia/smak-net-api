@@ -1,5 +1,5 @@
 import { InternalRouter } from "../../utils/schemas/router";
-import { Get, OperationId, Options, Path, Put, Query, Route, Security } from "tsoa";
+import { Delete, Get, OperationId, Options, Path, Put, Query, Route, Security } from "tsoa";
 import { paths } from "../../config/variables.config";
 import { CartId, CartResponse, CartState } from "./cart.interfaces";
 import { CartService } from "./cart.service";
@@ -38,6 +38,12 @@ export class CartRouter extends InternalRouter {
 
     this.router.put("/:cartId/product/:productId", validateBody(cartProductValidator), (ctx: ParameterizedContext) =>
       this.addProductToCart(ctx.params.cartId, ctx.params.productId, ctx.request.body.count)
+        .then(() => {
+          ctx.status = HTTP_STATUS.NO_CONTENT;
+        }));
+
+    this.router.delete("/:cartId/product/:productId", (ctx: ParameterizedContext) =>
+      this.removeProductFromCart(ctx.params.cartId, ctx.params.productId)
         .then(() => {
           ctx.status = HTTP_STATUS.NO_CONTENT;
         }));
@@ -81,5 +87,15 @@ export class CartRouter extends InternalRouter {
   @Put("/cart/{cartId}/product/{productId}")
   addProductToCart(@Path() cartId: string, @Path() productId: string, @Query() count: number): Promise<void> {
     return this.cartService.addProductToCart(cartId as CartId, productId as ProductId, count);
+  }
+
+  /*
+    * Remove product from cart
+   */
+  @OperationId("remove product from cart")
+  @Security("jwt", ["user"])
+  @Delete("/cart/{cartId}/product/{productId}")
+  removeProductFromCart(@Path() cartId: string, @Path() productId: string): Promise<void> {
+    return this.cartService.removeProductFromCart(cartId as CartId, productId as ProductId);
   }
 }

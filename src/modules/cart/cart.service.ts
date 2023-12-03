@@ -86,4 +86,16 @@ export class CartService {
     logger.silly(`Cart created for user: ${cart.ownerId}.`);
     return cartId;
   };
+
+  removeProductFromCart = async (cartId: CartId, productId: ProductId): Promise<void> => {
+    const cart: Cart | null = await CartRepository.findOneById(cartId);
+
+    if (!cart)
+      throw new ResourceNotFoundError(Resource.CART);
+
+    cart.products = cart.products.filter(product => product.id !== productId);
+    cart.modifiedAt = DateUtils.getDateNow();
+    await CartRepository.updateCart(cart);
+    logger.silly(`Product: ${productId} removed from cart: ${cart.id}.`);
+  };
 }

@@ -5,5 +5,6 @@ export type DeleteItemTestCase = {
   path: string,
   resourceName: Resource,
   requiredPermission: Permission,
-  statusCode?: number
+  statusCode?: number,
+  invalidPath?: string,
 }
