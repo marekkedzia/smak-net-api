@@ -19,6 +19,7 @@ import { IdUtils } from "../../utils/id.utils";
 import { DateUtils } from "../../utils/date.utils";
 import { FileRepository } from "./file.repository";
 import { Resource } from "../../utils/constants/resources.names";
+import { mapFileInfo } from "./file.mapper";
 
 
 export class FileService {
@@ -39,7 +40,7 @@ export class FileService {
   };
 
   getResourceFiles = (resourceId: string): Promise<FileInfo[]> =>
-    FileRepository.findManyByResourceId(resourceId);
+    FileRepository.findManyByResourceId(resourceId).then((f: FileInfo[]) => f.map(mapFileInfo));
 
   private handleSingleFileUpload =
     (validateFileUploadAccess: (resourceId: string) => Promise<void>) =>

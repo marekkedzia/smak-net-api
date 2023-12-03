@@ -10,14 +10,14 @@ export const testGetItemList = <SourceType extends DatabaseObject<string>[], Exp
   router: InternalRouter
 ) => {
   describe(`GET ${router.path}`, () => {
-      const getResponse = () => obtainTestGetResponse(router, router.path);
+      const getResponse = () => obtainTestGetResponse(router, testCase.path || router.path);
 
-        it(`should get ${testCase.resourceName} list ${testCase.expected}`, async () => {
-          const { status, body } = await getResponse();
+      it(`should get ${testCase.resourceName} list ${testCase.expected}`, async () => {
+        const { status, body } = await getResponse();
 
-          expect(status).toBe(HTTP_STATUS.OK);
-          expect(body).toStrictEqual(testCase.expected);
-        });
+        expect(status).toBe(HTTP_STATUS.OK);
+        expect(body).toStrictEqual(testCase.expected);
+      });
     }
   );
 };

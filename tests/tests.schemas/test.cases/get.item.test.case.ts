@@ -7,5 +7,6 @@ export type GetItemTestCase<SourceType extends Document, ExpectedType> = {
   expected: ExpectedType,
   resourceName: Resource,
   requiredPermission: Permission,
-  path?: string
+  path?: string,
+  queryParameterKey?: string
 }

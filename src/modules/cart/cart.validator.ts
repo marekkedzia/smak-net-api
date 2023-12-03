@@ -2,7 +2,7 @@ import { z as zod } from "zod";
 import { mapValuesToString } from "../../utils/map.to.string";
 import { CartState } from "./cart.interfaces";
 
-const cartStateAsStrings = mapValuesToString(CartState);
+const cartStateAsStrings: string[] = mapValuesToString(CartState);
 export const cartStateValidator = zod.object({
     state: zod.string().refine((state) => cartStateAsStrings.includes(state))
   }

@@ -31,13 +31,13 @@ export class CartRouter extends InternalRouter {
         }));
 
     this.router.put("/:cartId/state", validateBody(cartStateValidator), (ctx: ParameterizedContext) =>
-      this.changeCartState(ctx.params.cartId, mapStringToCartState(ctx.req.body.state))
+      this.changeCartState(ctx.params.cartId, mapStringToCartState(ctx.request.body.state))
         .then(() => {
           ctx.status = HTTP_STATUS.NO_CONTENT;
         }));
 
     this.router.put("/:cartId/product/:productId", validateBody(cartProductValidator), (ctx: ParameterizedContext) =>
-      this.addProductToCart(ctx.params.cartId, ctx.params.productId, ctx.req.body.count)
+      this.addProductToCart(ctx.params.cartId, ctx.params.productId, ctx.request.body.count)
         .then(() => {
           ctx.status = HTTP_STATUS.NO_CONTENT;
         }));

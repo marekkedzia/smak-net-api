@@ -13,7 +13,7 @@ export const testPutItem = (
 ) => {
   describe(`PUT ${router.path}`, () => {
       const putItem = (body, path?: string) => obtainTestPutResponse(router, path || testCase.path, body);
-      const invalidPath = `/${testCase.resourceName}/invalid`;
+      const invalidPath = testCase.invalidPath || `${router.path}/invalid-id`;
 
       it(`should put ${testCase.resourceName}`, async () => {
         const { status, body } = await putItem(testCase.validBody);

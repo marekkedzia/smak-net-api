@@ -6,5 +6,6 @@ export type PutItemTestCase = {
   resourceName: Resource,
   validBody: { [key: string]: any },
   requiredPermission: Permission,
-  statusCode?: number
+  statusCode?: number,
+  invalidPath?: string
 }

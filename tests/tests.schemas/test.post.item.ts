@@ -2,6 +2,7 @@ import { InternalRouter } from "../../src/utils/schemas/router";
 import { HTTP_STATUS } from "../../src/utils/constants/http.statuses";
 import { obtainTestPostResponse } from "../generators/app.generator";
 import { PostItemTestCase } from "./test.cases/post.item.test.case";
+import { isArray, isObject } from "./utils/check.type";
 
 export const testPostItem = (
   testCase: PostItemTestCase,
@@ -11,8 +12,6 @@ export const testPostItem = (
   describe(`POST ${router.path}`, () => {
       const path = testCase.path || router.path;
       const postItem = (body) => obtainTestPostResponse(router, path, body);
-      const isObject = (value): boolean => typeof value === "object";
-      const isArray = (value): boolean => Array.isArray(value);
 
 
       it(`should post ${testCase.resourceName}`, async () => {

@@ -1,3 +1,5 @@
+import { UserId } from "../utils/schemas/user.id";
+
 export const variablesConfig = {
   maxProductNameLength: 255,
   maxProductDescriptionLength: 2048,
@@ -12,6 +14,8 @@ export const paths = {
   product: "/product",
   cart: "/cart"
 };
+
+export const DUMMY_USER_ID = "DUMMY_USER_ID" as UserId;
 
 export enum CATEGORY {
   FRUIT = "FRUIT",

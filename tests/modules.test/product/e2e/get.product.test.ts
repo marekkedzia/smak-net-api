@@ -9,7 +9,7 @@ import { DateUtils } from "../../../../src/utils/date.utils";
 import { Mongo } from "../../../../src/db/mongo";
 import { CATEGORY } from "../../../../src/config/variables.config";
 
-describe("test post product endpoint", () => {
+describe("test get product endpoint", () => {
     const source: Product = {
       name: "product-name",
       description: "product-description",
