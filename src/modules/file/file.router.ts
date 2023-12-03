@@ -50,7 +50,7 @@ export class FileRouter extends InternalRouter {
    */
   @OperationId("add product file")
   @Security("jwt", ["admin"])
-  @Post("/product/{productId}")
+  @Post("/product/{productId}") //TODO
   streamProductImage(ctx: ParameterizedContext, next: Next): Promise<void> {
     return this.fileService.streamFile(this.productImageHandlers.handleProductImageUpload, this.productImageHandlers.validateImageUploadAccess)(ctx, next);
   }
