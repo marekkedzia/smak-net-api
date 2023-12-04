@@ -6,6 +6,7 @@ import { ProductId } from "../modules/product/product.interfaces";
 import { FileId, FileKey } from "../modules/file/file.interfaces";
 import { CartId } from "../modules/cart/cart.interfaces";
 import { UserId } from "./schemas/user.id";
+import { PaymentId } from "../modules/payment/payment.interfaces";
 
 export class IdUtils {
   private static provideId = uuid;
@@ -16,14 +17,16 @@ export class IdUtils {
   public static provideFileId = (): FileId => `${IdPrefix.FILE_ID}-${this.provideId()}` as FileId;
   public static provideFileKey = (userId: UserId, mimeType: string, fileName: string): FileKey => `${userId}-${fileName}-${this.provideId()}.${mimeType}` as FileKey;
   public static provideCartId = (): CartId => `${IdPrefix.CART_ID}-${this.provideId()}` as CartId;
+  public static providePaymentId = (): PaymentId => `${IdPrefix.PAYMENT_ID}-${this.provideId()}` as PaymentId;
 }
 
 enum IdPrefix {
   ERROR = "err",
   INTERNAL_EVENT = "ie",
   REQUEST_ID = "req",
-  PRODUCT_ID = "p",
+  PRODUCT_ID = "pr",
   FILE_ID = "f",
   FILE_KEY = "fk",
-  CART_ID = "c"
+  CART_ID = "c",
+  PAYMENT_ID = "py"
 }

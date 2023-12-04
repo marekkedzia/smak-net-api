@@ -12,7 +12,9 @@ export const variablesConfig = {
 export const paths = {
   file: "/file",
   product: "/product",
-  cart: "/cart"
+  cart: "/cart",
+  order: "/order",
+  payment: "/payment",
 };
 
 export const DUMMY_USER_ID = "DUMMY_USER_ID" as UserId;

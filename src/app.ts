@@ -7,6 +7,7 @@ import { errorHandler } from "./errors/error.handler";
 import { productRouter } from "./context/product.context";
 import { fileRouter } from "./context/file.context";
 import { cartRouter } from "./context/cart.context";
+import { paymentRouter } from "./context/payment.context";
 
 
 export const app = new Koa()
@@ -17,4 +18,5 @@ export const app = new Koa()
   .use(internalLocalStorage.startStorage)
   .use(productRouter.getRoutes())
   .use(fileRouter.getRoutes())
-  .use(cartRouter.getRoutes());
+  .use(cartRouter.getRoutes())
+  .use(paymentRouter.getRoutes());
