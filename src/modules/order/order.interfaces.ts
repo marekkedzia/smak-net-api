@@ -4,4 +4,9 @@ import { DatabaseObject } from "../../utils/schemas/database.object";
 
 export type OrderId = Opaque<string, Order>;
 
-export type Order = {} & PaymentObject & DatabaseObject<OrderId>;
+export type Order = OrderRequest & PaymentObject & DatabaseObject<OrderId>;
+
+export type OrderRequest = {
+  note: string;
+  resourceId: string;
+};

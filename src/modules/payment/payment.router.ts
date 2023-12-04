@@ -5,8 +5,6 @@ import { HTTP_STATUS } from "../../utils/constants/http.statuses";
 import { ParameterizedContext } from "koa";
 import { PaymentService } from "./payment.service";
 import { PaymentKey, PaymentRequest } from "./payment.interfaces";
-import { validateBody } from "../../utils/validator";
-import { paymentRequestValidator } from "./payment.validator";
 
 @Route("/payment")
 export class PaymentRouter extends InternalRouter {
@@ -14,9 +12,8 @@ export class PaymentRouter extends InternalRouter {
     super(paths.payment);
 
     this.router.post(`${paths.order}/:orderId`,
-      validateBody(paymentRequestValidator),
       (ctx: ParameterizedContext) =>
-        this.createOrderPayment(ctx.request.body).then(async (paymentKey: PaymentKey): Promise<void> => {
+        this.createOrderPayment({ resourceId: ctx.params.orderId }).then(async (paymentKey: PaymentKey): Promise<void> => {
           ctx.status = HTTP_STATUS.CREATED;
           ctx.body = { paymentKey };
         })

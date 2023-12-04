@@ -7,14 +7,14 @@ import { OwnerId } from "../../../../src/utils/schemas/owner.id";
 import { testGetItem } from "../../../tests.schemas/test.get.item";
 import { DateUtils } from "../../../../src/utils/date.utils";
 import { Mongo } from "../../../../src/db/mongo";
-import { CATEGORY } from "../../../../src/config/variables.config";
+import { variablesConfig } from "../../../../src/config/variables.config";
 
 describe("test get product endpoint", () => {
     const source: Product = {
       name: "product-name",
       description: "product-description",
       price: 1,
-      category: CATEGORY.FRUIT,
+      category: variablesConfig.categories.FRUIT,
       createdAt: DateUtils.getDateNow(),
       ownerId: "owner-id" as OwnerId,
       id: "product-id" as ProductId

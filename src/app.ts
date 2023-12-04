@@ -8,6 +8,7 @@ import { productRouter } from "./context/product.context";
 import { fileRouter } from "./context/file.context";
 import { cartRouter } from "./context/cart.context";
 import { paymentRouter } from "./context/payment.context";
+import { orderRouter } from "./context/order.context";
 
 
 export const app = new Koa()
@@ -19,4 +20,5 @@ export const app = new Koa()
   .use(productRouter.getRoutes())
   .use(fileRouter.getRoutes())
   .use(cartRouter.getRoutes())
-  .use(paymentRouter.getRoutes());
+  .use(paymentRouter.getRoutes())
+  .use(orderRouter.getRoutes());

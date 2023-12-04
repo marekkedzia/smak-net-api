@@ -6,7 +6,20 @@ export const variablesConfig = {
   maxFilesNumberExceededMessage: "Max files number exceeded",
   serverCannotHandleFileUploadMessage: "Server cannot handle file upload",
   maxFilesUploadNumber: 10,
-  mimeTypeSplitter: "/"
+  mimeTypeSplitter: "/",
+  handledCurrencies: {
+    PLN: "PLN"
+  },
+  categories: {
+    FRUIT: "FRUIT",
+    VEGETABLE: "VEGETABLE",
+    DAIRY: "DAIRY",
+    MEAT: "MEAT",
+    BREAD: "BREAD",
+    DRINKS: "DRINKS",
+    SNACKS: "SNACKS",
+    OTHER: "OTHER"
+  }
 };
 
 export const paths = {
@@ -14,18 +27,7 @@ export const paths = {
   product: "/product",
   cart: "/cart",
   order: "/order",
-  payment: "/payment",
+  payment: "/payment"
 };
 
 export const DUMMY_USER_ID = "DUMMY_USER_ID" as UserId;
-
-export enum CATEGORY {
-  FRUIT = "FRUIT",
-  VEGETABLE = "VEGETABLE",
-  DAIRY = "DAIRY",
-  MEAT = "MEAT",
-  BREAD = "BREAD",
-  DRINKS = "DRINKS",
-  SNACKS = "SNACKS",
-  OTHER = "OTHER"
-}

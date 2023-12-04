@@ -7,6 +7,7 @@ import { FileId, FileKey } from "../modules/file/file.interfaces";
 import { CartId } from "../modules/cart/cart.interfaces";
 import { UserId } from "./schemas/user.id";
 import { PaymentId } from "../modules/payment/payment.interfaces";
+import { OrderId } from "../modules/order/order.interfaces";
 
 export class IdUtils {
   private static provideId = uuid;
@@ -18,6 +19,7 @@ export class IdUtils {
   public static provideFileKey = (userId: UserId, mimeType: string, fileName: string): FileKey => `${userId}-${fileName}-${this.provideId()}.${mimeType}` as FileKey;
   public static provideCartId = (): CartId => `${IdPrefix.CART_ID}-${this.provideId()}` as CartId;
   public static providePaymentId = (): PaymentId => `${IdPrefix.PAYMENT_ID}-${this.provideId()}` as PaymentId;
+  public static provideOrderId = (): OrderId => `${IdPrefix.ORDER_ID}-${this.provideId()}` as OrderId;
 }
 
 enum IdPrefix {
@@ -28,5 +30,6 @@ enum IdPrefix {
   FILE_ID = "f",
   FILE_KEY = "fk",
   CART_ID = "c",
-  PAYMENT_ID = "py"
+  PAYMENT_ID = "py",
+  ORDER_ID = "o"
 }

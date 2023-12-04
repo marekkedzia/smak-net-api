@@ -9,9 +9,6 @@ import { Mongo } from "../../../../src/db/mongo";
 
 describe("test post order payment endpoint", () => {
     const orderId = "orderId";
-    const validBody: PaymentRequest = {
-      resourceId: orderId
-    };
 
     Mongo.orders = jest.fn().mockReturnValue({
       findOne: jest.fn().mockResolvedValue({
@@ -29,7 +26,7 @@ describe("test post order payment endpoint", () => {
       path: `${paths.payment}${paths.order}/${orderId}`,
       resourceName: Resource.ORDER,
       requiredPermission: Permission.CREATE_ORDER_PAYMENT,
-      validBody
+      validBody: {}
     };
 
     testPostItem(testCase, paymentRouter);

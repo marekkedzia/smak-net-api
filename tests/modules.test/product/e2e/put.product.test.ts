@@ -4,14 +4,14 @@ import { Permission } from "../../../../src/auth/permission";
 import { testPutItem } from "../../../tests.schemas/test.put.item";
 import { productRouter } from "../../../../src/context/product.context";
 import { Mongo } from "../../../../src/db/mongo";
-import { CATEGORY } from '../../../../src/config/variables.config';
+import { variablesConfig } from "../../../../src/config/variables.config";
 
 describe("test put product endpoint", () => {
     const productId = "product-id";
     const validBody = {
       name: "product-name",
       description: "product-description",
-      category: CATEGORY.BREAD,
+      category: variablesConfig.categories.BREAD,
       price: 1
     };
 
