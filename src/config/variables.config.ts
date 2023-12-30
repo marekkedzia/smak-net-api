@@ -19,7 +19,9 @@ export const variablesConfig = {
     DRINKS: "DRINKS",
     SNACKS: "SNACKS",
     OTHER: "OTHER"
-  }
+  },
+  stripeApiVersion: "2023-10-16",
+  allowedPaymentMethods: ["card", "p24", "blik"]
 };
 
 export const paths = {

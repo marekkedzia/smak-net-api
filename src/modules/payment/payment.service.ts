@@ -27,7 +27,7 @@ export class PaymentService {
       if (!paymentObject)
         throw new ResourceNotFoundError(resourceType);
 
-      const paymentKey: PaymentKey = await this.providePaymentKey({}); //TODO
+      const paymentKey: PaymentKey = await this.providePaymentKey({ amount: paymentObject.amount });
       const userId: UserId = internalLocalStorage.getUserId();
 
       const payment: Payment = {

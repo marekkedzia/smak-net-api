@@ -20,4 +20,6 @@ export type PaymentKey = Opaque<string, Payment>;
 
 export type PaymentId = Opaque<string, Payment>;
 
-export type ApiPaymentRequest = {}
+export type ApiPaymentRequest = {
+  amount: number;
+}

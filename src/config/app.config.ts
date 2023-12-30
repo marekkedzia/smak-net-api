@@ -16,5 +16,6 @@ export const appConfig = {
   AUTH0_CLIENT_ID: required("AUTH0_CLIENT_ID", process.env.AUTH0_CLIENT_ID),
   AUTH0_APP_METADATA_CLAIM: required("AUTH0_APP_METADATA_CLAIM", process.env.AUTH0_APP_METADATA_CLAIM),
   AWS_REGION: required("AWS_REGION", process.env.AWS_REGION),
-  S3_BUCKET_NAME: required("S3_BUCKET_NAME", process.env.S3_BUCKET_NAME)
+  S3_BUCKET_NAME: required("S3_BUCKET_NAME", process.env.S3_BUCKET_NAME),
+  STRIPE_KEY: required("STRIPE_KEY", process.env.STRIPE_KEY),
 };
