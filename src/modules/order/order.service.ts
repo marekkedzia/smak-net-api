@@ -12,12 +12,18 @@ export class OrderService {
   ) {
   }
 
+  getAllOrders = async (): Promise<Order[]> => {
+    const userId: UserId = internalLocalStorage.getUserId();
+    return OrderRepository.findAllByOwnerId(userId);
+  };
+
   createCartOrder = (orderRequest: OrderRequest) => this.createOrder(this.findCartAmountAndCurrency)(orderRequest);
 
   private createOrder = (findAmountAndCurrency: (resourceId: string) => Promise<{ price: number, currency: string }>) =>
     async (orderRequest: OrderRequest): Promise<OrderId> => {
       const { price, currency } = await findAmountAndCurrency(orderRequest.resourceId);
       const userId: UserId = internalLocalStorage.getUserId();
+
       const order: Order = {
         id: IdUtils.provideOrderId(),
         ...orderRequest,
