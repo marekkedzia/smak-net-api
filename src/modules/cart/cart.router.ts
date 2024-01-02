@@ -60,11 +60,11 @@ export class CartRouter extends InternalRouter {
   }
 
   /*
-    * Get cart
+    * Init cart
    */
   @OperationId("init cart")
   @Security("jwt", ["user"])
-  @Get("/cart")
+  @Get("/cart/init")
   initCart(): Promise<string> {
     return this.cartService.optionsCart();
   }
