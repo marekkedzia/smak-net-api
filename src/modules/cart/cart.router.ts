@@ -1,5 +1,5 @@
 import { InternalRouter } from "../../utils/schemas/router";
-import { Delete, Get, OperationId, Options, Path, Put, Query, Route, Security } from "tsoa";
+import { Delete, Get, OperationId, Path, Put, Query, Route, Security } from "tsoa";
 import { paths } from "../../config/variables.config";
 import { CartId, CartResponse, CartState } from "./cart.interfaces";
 import { CartService } from "./cart.service";
@@ -16,8 +16,8 @@ export class CartRouter extends InternalRouter {
   constructor(private cartService: CartService) {
     super(paths.cart);
 
-    this.router.options("/", (ctx: ParameterizedContext) =>
-      this.optionsCart()
+    this.router.get("/init", (ctx: ParameterizedContext) =>
+      this.initCart()
         .then((cartId: string) => {
           ctx.body = cartId;
           ctx.status = HTTP_STATUS.OK;
@@ -60,12 +60,12 @@ export class CartRouter extends InternalRouter {
   }
 
   /*
-    * Options cart
+    * Get cart
    */
-  @OperationId("options cart")
+  @OperationId("init cart")
   @Security("jwt", ["user"])
-  @Options("/cart")
-  optionsCart(): Promise<string> {
+  @Get("/cart")
+  initCart(): Promise<string> {
     return this.cartService.optionsCart();
   }
 
