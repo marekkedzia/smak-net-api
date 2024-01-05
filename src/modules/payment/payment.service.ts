@@ -1,4 +1,4 @@
-import { ApiPaymentRequest, Payment, PaymentKey, PaymentObject, PaymentRequest } from "./payment.interfaces";
+import { ApiPaymentRequest, Payment, PaymentObject, PaymentRequest, PaymentSessionId } from './payment.interfaces';
 import { PaymentRepository } from "./payment.repository";
 import { logger } from "../../utils/logger";
 import { internalLocalStorage } from "../../config/internal.local.storage.config";
@@ -12,22 +12,22 @@ import { UserId } from "../../utils/schemas/user.id";
 export class PaymentService {
 
   constructor(
-    private providePaymentKey: (apiPaymentRequest: ApiPaymentRequest) => Promise<PaymentKey>,
+    private createPaymentSession: (apiPaymentRequest: ApiPaymentRequest) => Promise<PaymentSessionId>,
     private getOrderPaymentObject: (orderId: OrderId) => Promise<PaymentObject | null>
   ) {
   }
 
-  public createOrderPayment = (paymentRequest: PaymentRequest): Promise<PaymentKey> =>
+  public createOrderPayment = (paymentRequest: PaymentRequest): Promise<PaymentSessionId> =>
     this.createPayment(this.getOrderPaymentObject, Resource.ORDER)(paymentRequest);
 
   private createPayment = (getPaymentObject: (resourceId: string) => Promise<PaymentObject | null>, resourceType: Resource) =>
-    async (paymentRequest: PaymentRequest): Promise<PaymentKey> => {
+    async (paymentRequest: PaymentRequest): Promise<PaymentSessionId> => {
       const paymentObject: PaymentObject | null = await getPaymentObject(paymentRequest.resourceId);
 
       if (!paymentObject)
         throw new ResourceNotFoundError(resourceType);
 
-      const paymentKey: PaymentKey = await this.providePaymentKey({ amount: paymentObject.amount });
+      const sessionId: PaymentSessionId = await this.createPaymentSession({ amount: paymentObject.amount });
       const userId: UserId = internalLocalStorage.getUserId();
 
       const payment: Payment = {
@@ -35,14 +35,14 @@ export class PaymentService {
         ...paymentRequest,
         resourceType,
         ...paymentObject,
-        paymentKey,
+        sessionId,
         ownerId: userId,
         createdAt: DateUtils.getDateNow()
       };
 
       await PaymentRepository.createPayment(payment);
 
-      logger.info(`Payment created with key ${paymentKey}, for user ${internalLocalStorage.getUserId()}, by request ${internalLocalStorage.getRequestId()}`);
-      return paymentKey;
+      logger.info(`Payment session created with key ${sessionId}, for user ${internalLocalStorage.getUserId()}, by request ${internalLocalStorage.getRequestId()}`);
+      return sessionId;
     };
 }

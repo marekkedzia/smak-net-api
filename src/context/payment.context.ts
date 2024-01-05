@@ -15,5 +15,5 @@ const findOrderPaymentObject = (orderId: OrderId) =>
       null
   );
 
-const paymentService = new PaymentService(new StripeClient().getPaymentIntent, findOrderPaymentObject);
+const paymentService = new PaymentService(new StripeClient().createPaymentSession, findOrderPaymentObject);
 export const paymentRouter = new PaymentRouter(paymentService);

@@ -26,8 +26,9 @@ export class OrderRouter extends InternalRouter {
         this.createCartOrder({
           note: ctx.request.body.note,
           resourceId: ctx.params.cartId
-        }).then(async (): Promise<void> => {
+        }).then(async (orderId: OrderId): Promise<void> => {
             ctx.status = HTTP_STATUS.CREATED;
+            ctx.body = { orderId }
           }
         )
     );

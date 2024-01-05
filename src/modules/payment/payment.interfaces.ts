@@ -4,7 +4,7 @@ import { Resource } from "../../utils/constants/resources.names";
 
 export type Payment = {
   resourceType: Resource,
-  paymentKey: PaymentKey;
+  sessionId: PaymentSessionId;
 } & PaymentObject & PaymentRequest & DatabaseObject<PaymentId>
 
 export type PaymentObject = {
@@ -16,7 +16,7 @@ export type PaymentRequest = {
   resourceId: string;
 }
 
-export type PaymentKey = Opaque<string, Payment>;
+export type PaymentSessionId = Opaque<string, Payment>;
 
 export type PaymentId = Opaque<string, Payment>;
 

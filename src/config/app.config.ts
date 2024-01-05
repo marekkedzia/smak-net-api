@@ -18,4 +18,7 @@ export const appConfig = {
   AWS_REGION: required("AWS_REGION", process.env.AWS_REGION),
   S3_BUCKET_NAME: required("S3_BUCKET_NAME", process.env.S3_BUCKET_NAME),
   STRIPE_KEY: required("STRIPE_KEY", process.env.STRIPE_KEY),
+  PAYMENT_SUCCESS_URL: required("PAYMENT_SUCCESS_URL", process.env.PAYMENT_SUCCESS_URL),
+  PAYMENT_CANCEL_URL: required("PAYMENT_CANCEL_URL", process.env.PAYMENT_CANCEL_URL),
+  PAYMENT_WEBHOOK_SECRET: required("PAYMENT_WEBHOOK_SECRET", process.env.PAYMENT_WEBHOOK_SECRET),
 };

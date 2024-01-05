@@ -7,4 +7,6 @@ export enum ErrorCodes {
   INVALID_DATE_RANGE = "error/invalid-date-range",
   FILES_UPLOAD_FAILED = "error/files-upload-failed",
   INVALID_CART_STATE_TRANSITION = "error/invalid-cart-state-transition",
+  MISSING_STRIPE_SIGNATURE = 'error/missing-stripe-signature',
+  UNHANDLED_STRIPE_EVENT = "error/unhandled-stripe-event",
 }

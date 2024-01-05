@@ -21,7 +21,11 @@ export const variablesConfig = {
     OTHER: "OTHER"
   },
   stripeApiVersion: "2023-10-16",
-  allowedPaymentMethods: ["card", "p24", "blik"]
+  allowedPaymentMethods: ["card", "p24", "blik"],
+  paymentProductsQuantity: 1,
+  paymentProductName: 'Smak-net order',
+  paymentMode: 'payment',
+  stripeSignatureHeader: "stripe-signature"
 };
 
 export const paths = {
@@ -29,7 +33,13 @@ export const paths = {
   product: "/product",
   cart: "/cart",
   order: "/order",
-  payment: "/payment"
+  payment: "/payment",
+  webhook: "/webhook"
+};
+
+export const webhookEventTypes = {
+    paymentSucceeded: "payment_intent.succeeded",
+    paymentFailed: "payment_intent.payment_failed"
 };
 
 export const DUMMY_USER_ID = "DUMMY_USER_ID" as UserId;
