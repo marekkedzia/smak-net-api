@@ -1,4 +1,5 @@
 import { UserId } from "../utils/schemas/user.id";
+import { appConfig } from './app.config';
 
 export const variablesConfig = {
   maxProductNameLength: 255,
@@ -22,8 +23,6 @@ export const variablesConfig = {
   },
   stripeApiVersion: "2023-10-16",
   allowedPaymentMethods: ["card", "p24", "blik"],
-  paymentProductsQuantity: 1,
-  paymentProductName: 'Smak-net order',
   paymentMode: 'payment',
   stripeSignatureHeader: "stripe-signature"
 };
@@ -37,9 +36,9 @@ export const paths = {
   webhook: "/webhook"
 };
 
-export const webhookEventTypes = {
-    paymentSucceeded: "payment_intent.succeeded",
-    paymentFailed: "payment_intent.payment_failed"
-};
+export enum webhookEventTypes  {
+    PAYMENT_SUCCEEDED = "payment_intent.succeeded",
+    PAYMENT_FAILED = "payment_intent.payment_failed"
+}
 
 export const DUMMY_USER_ID = "DUMMY_USER_ID" as UserId;

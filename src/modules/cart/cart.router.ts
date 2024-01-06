@@ -16,13 +16,6 @@ export class CartRouter extends InternalRouter {
   constructor(private cartService: CartService) {
     super(paths.cart);
 
-    this.router.get("/current", (ctx: ParameterizedContext) =>
-      this.getCurrentCart()
-        .then((cartId: string) => {
-          ctx.body = cartId;
-          ctx.status = HTTP_STATUS.OK;
-        }));
-
     this.router.get("/", validateQuery(cartStateValidator), (ctx: ParameterizedContext) =>
       this.getCart(mapStringToCartState(ctx.query.state as string))
         .then((cart: CartResponse) => {
@@ -57,16 +50,6 @@ export class CartRouter extends InternalRouter {
   @Get("/cart")
   getCart(@Query() state: CartState): Promise<CartResponse> {
     return this.cartService.getCart(state);
-  }
-
-  /*
-    * Get current cart
-   */
-  @OperationId("get current cart")
-  @Security("jwt", ["user"])
-  @Get("/cart/current")
-  getCurrentCart(): Promise<string> {
-    return this.cartService.getCurrentCart();
   }
 
   /*

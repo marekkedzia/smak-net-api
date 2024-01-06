@@ -5,7 +5,8 @@ import { Resource } from "../../utils/constants/resources.names";
 export type Payment = {
   resourceType: Resource,
   sessionId: PaymentSessionId;
-} & PaymentObject & PaymentRequest & DatabaseObject<PaymentId>
+  lineItems: LineItem[]
+}  & PaymentRequest & DatabaseObject<PaymentId>
 
 export type PaymentObject = {
   amount: number;
@@ -14,6 +15,8 @@ export type PaymentObject = {
 
 export type PaymentRequest = {
   resourceId: string;
+  successUrl: string;
+  cancelUrl: string;
 }
 
 export type PaymentSessionId = Opaque<string, Payment>;
@@ -21,5 +24,19 @@ export type PaymentSessionId = Opaque<string, Payment>;
 export type PaymentId = Opaque<string, Payment>;
 
 export type ApiPaymentRequest = {
-  amount: number;
+  lineItems: LineItem[];
+  successUrl: string;
+  cancelUrl: string;
+}
+
+
+export interface LineItem {
+  price_data: {
+    currency: string;
+    product_data: {
+      name: string;
+    };
+    unit_amount: number;
+  };
+  quantity: number;
 }

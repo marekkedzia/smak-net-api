@@ -4,7 +4,6 @@ import { paths, variablesConfig } from '../config/variables.config';
 import { ParameterizedContext } from 'koa';
 import { HTTP_STATUS } from '../utils/constants/http.statuses';
 import { WebhookService } from './webhook.service';
-import { addRawBody } from '../utils/webhook.raw.body';
 import { WebhookHeaders } from './webhook.interfaces';
 
 @Route("/webhook")
@@ -13,19 +12,19 @@ export class WebhookRouter extends InternalRouter {
   constructor(private webhookService: WebhookService){
     super(paths.webhook);
 
-    this.router.post("/", addRawBody, (ctx: ParameterizedContext) =>
+    this.router.post(`${paths.payment}`, (ctx: ParameterizedContext) =>
       this.handleEvent(ctx.headers, ctx.request.rawBody)
         .then(() => {
-          ctx.status = HTTP_STATUS.OK;
+          ctx.status = HTTP_STATUS.CREATED;
         }));
   }
 
   /*
-    * Handle webhook event
+    * Handle payment webhook event
    */
   @OperationId("Handle webhook event")
   @Post("/webhook")
   handleEvent(headers: WebhookHeaders, rawBody: string): Promise<void> {
-    return this.webhookService.handleEvent(headers, rawBody);
+    return this.webhookService.handlePaymentEvent(headers, rawBody);
   }
 }

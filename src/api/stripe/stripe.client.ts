@@ -14,24 +14,21 @@ export class StripeClient {
     );
   }
 
-  createPaymentSession = ({ amount }): Promise<PaymentSessionId> =>
+  createPaymentSession = ({ lineItems, successUrl, cancelUrl }): Promise<PaymentSessionId> =>
     this.client.checkout.sessions.create({
       // @ts-ignore
         payment_method_types: variablesConfig.allowedPaymentMethods,
-        line_items: [{
-          price_data: {
-            currency: variablesConfig.handledCurrencies.PLN,
-            product_data: {
-              name: variablesConfig.paymentProductName,
-            },
-            unit_amount: amount,
-          },
-          quantity: variablesConfig.paymentProductsQuantity,
-        }],
+        line_items: lineItems,
       mode: variablesConfig.paymentMode,
-      success_url: appConfig.PAYMENT_SUCCESS_URL,
-      cancel_url: appConfig.PAYMENT_CANCEL_URL
+      success_url: successUrl,
+      cancel_url: cancelUrl
       }
     ).then((session: Stripe.Checkout.Session): PaymentSessionId => session.id as PaymentSessionId);
+
+  constructPaymentEvent = (rawBody: string, signature: string): Stripe.Event => this.client.webhooks.constructEvent(
+    rawBody,
+    signature,
+    appConfig.PAYMENT_WEBHOOK_SECRET
+  )
 
 }

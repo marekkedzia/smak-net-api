@@ -1,4 +1,4 @@
-import { ApiPaymentRequest, Payment, PaymentObject, PaymentRequest, PaymentSessionId } from './payment.interfaces';
+import { ApiPaymentRequest, Payment, PaymentRequest, PaymentSessionId } from './payment.interfaces';
 import { PaymentRepository } from "./payment.repository";
 import { logger } from "../../utils/logger";
 import { internalLocalStorage } from "../../config/internal.local.storage.config";
@@ -8,33 +8,38 @@ import { Resource } from "../../utils/constants/resources.names";
 import { IdUtils } from "../../utils/id.utils";
 import { DateUtils } from "../../utils/date.utils";
 import { UserId } from "../../utils/schemas/user.id";
+import {LineItem} from './payment.interfaces';
 
 export class PaymentService {
 
   constructor(
     private createPaymentSession: (apiPaymentRequest: ApiPaymentRequest) => Promise<PaymentSessionId>,
-    private getOrderPaymentObject: (orderId: OrderId) => Promise<PaymentObject | null>
+    private getOrderLineItems: (orderId: OrderId) => Promise<LineItem[] | null>
   ) {
   }
 
   public createOrderPayment = (paymentRequest: PaymentRequest): Promise<PaymentSessionId> =>
-    this.createPayment(this.getOrderPaymentObject, Resource.ORDER)(paymentRequest);
+    this.createPayment(this.getOrderLineItems, Resource.ORDER)(paymentRequest);
 
-  private createPayment = (getPaymentObject: (resourceId: string) => Promise<PaymentObject | null>, resourceType: Resource) =>
+  private createPayment = (getPaymentObject: (resourceId: string) => Promise<LineItem[] | null>, resourceType: Resource) =>
     async (paymentRequest: PaymentRequest): Promise<PaymentSessionId> => {
-      const paymentObject: PaymentObject | null = await getPaymentObject(paymentRequest.resourceId);
+      const lineItems: LineItem[] | null = await getPaymentObject(paymentRequest.resourceId);
 
-      if (!paymentObject)
+      if (!lineItems)
         throw new ResourceNotFoundError(resourceType);
 
-      const sessionId: PaymentSessionId = await this.createPaymentSession({ amount: paymentObject.amount });
+      const sessionId: PaymentSessionId = await this.createPaymentSession({
+        lineItems: lineItems,
+        successUrl: paymentRequest.successUrl,
+        cancelUrl: paymentRequest.cancelUrl
+      });
       const userId: UserId = internalLocalStorage.getUserId();
 
       const payment: Payment = {
         id: IdUtils.providePaymentId(),
         ...paymentRequest,
         resourceType,
-        ...paymentObject,
+        lineItems,
         sessionId,
         ownerId: userId,
         createdAt: DateUtils.getDateNow()
@@ -42,7 +47,7 @@ export class PaymentService {
 
       await PaymentRepository.createPayment(payment);
 
-      logger.info(`Payment session created with key ${sessionId}, for user ${internalLocalStorage.getUserId()}, by request ${internalLocalStorage.getRequestId()}`);
+      logger.info(`Payment created with key ${sessionId}, for user ${internalLocalStorage.getUserId()}, by request ${internalLocalStorage.getRequestId()}`);
       return sessionId;
     };
 }

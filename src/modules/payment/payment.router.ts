@@ -13,7 +13,8 @@ export class PaymentRouter extends InternalRouter {
 
     this.router.post(`${paths.order}/:orderId`,
       (ctx: ParameterizedContext) =>
-        this.createOrderPayment({ resourceId: ctx.params.orderId }).then(async (sessionId: PaymentSessionId): Promise<void> => {
+        this.createOrderPayment({ resourceId: ctx.params.orderId, successUrl: ctx.request.body.successUrl, cancelUrl: ctx.request.body.cancelUrl })
+          .then(async (sessionId: PaymentSessionId): Promise<void> => {
           ctx.status = HTTP_STATUS.CREATED;
           ctx.body = { sessionId };
         })

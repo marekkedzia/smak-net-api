@@ -82,15 +82,3 @@ export class InvalidCartStateTransition implements AppError {
   code = ErrorCodes.INVALID_CART_STATE_TRANSITION;
   data = ErrorDatas.INVALID_CART_STATE_TRANSITION;
 }
-
-export class MissingStripeSignature implements AppError {
-  status = HTTP_STATUS.BAD_REQUEST;
-  code = ErrorCodes.MISSING_STRIPE_SIGNATURE;
-  data = ErrorDatas.MISSING_STRIPE_SIGNATURE;
-}
-
-export class UnhandledStripeEvent implements AppError {
-  status = HTTP_STATUS.BAD_REQUEST;
-  code = ErrorCodes.UNHANDLED_STRIPE_EVENT;
-  data = ErrorDatas.UNHANDLED_STRIPE_EVENT;
-}

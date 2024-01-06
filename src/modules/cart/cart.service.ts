@@ -13,7 +13,7 @@ export class CartService {
   constructor(private isProductAvailable: (productId: string) => Promise<boolean>) {
   }
 
-  getCurrentCart = async (): Promise<CartId> => {
+  initCart = async (): Promise<CartId> => {
     const cart: Cart | null = await CartRepository.findActiveOneByOwnerId(internalLocalStorage.getUserId());
     let cartId: CartId;
     if (!cart)
@@ -21,11 +21,13 @@ export class CartService {
     else
       cartId = cart.id;
 
-    logger.silly(`Cart for user: ${internalLocalStorage.getUserId()}, cart: ${cartId}.`);
+    logger.silly(`Cart options obtained for user: ${internalLocalStorage.getUserId()} and cart: ${cartId}.`);
     return cartId;
   };
 
   getCart = async (state: CartState): Promise<CartResponse> => {
+    await this.initCart();
+
     const cart: Cart | null = await CartRepository.findOneByOwnerIdAndState(internalLocalStorage.getUserId(), state);
 
     if (!cart)
